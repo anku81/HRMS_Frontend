@@ -1,14 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import LoginForm from '../components/authComponents/LoginForm'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { getAsideTabs } from '../services/operations/AsideBar'
 
 const LoginPage = () => {
-  return (
-    <>
+  const navigate = useNavigate()
+  const isLoggedIn = useSelector((state)=>state.Auth.isLoggedIn)
 
-    
-    <LoginForm/>
+ 
+  useEffect(()=>{
+    if(isLoggedIn)
+    {
+      navigate("/")
+    }
+  },[])
+  return(
+    <>
+   { !isLoggedIn && <LoginForm/> }
     </>
   )
+  
+
 }
 
 export default LoginPage

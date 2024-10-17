@@ -6,7 +6,7 @@ import { login } from "../../services/operations/auth";
 
 const LoginForm = () => {
     const navigate = useNavigate()
-    // const dispatch = useDispatch()
+    const dispatch = useDispatch()
   const {
     register,
     handleSubmit,
@@ -22,7 +22,7 @@ const LoginForm = () => {
             </h1>
           </div>
 
-          <form  className="p-4 flex flex-col rounded-r-lg "  onSubmit={handleSubmit((data) =>navigate("/"))}>
+          <form  className="p-4 flex flex-col rounded-r-lg "  onSubmit={handleSubmit((data) =>dispatch(login(data.email,data.password,navigate)))}>
         
             <div className=" flex flex-col space-y-5">
               
@@ -41,7 +41,7 @@ const LoginForm = () => {
                 type="password"
                 placeholder="Enter your password"
                 className="p-2 border border-gray-400 rounded"
-                {...register("password", { required: true, minLength: 8 })}
+                {...register("password", { required: true })}
               />
               {errors.password && <div>Please enetr your password</div>}
             </div>

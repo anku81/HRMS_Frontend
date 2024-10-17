@@ -1,11 +1,16 @@
 import axios from "axios";
 
-export const axiosInstance = axios({})
+export const axiosInstance =  axios.create({})
 
-export const apiConnector = (method,Url,body,header,params)=>{
-    method : method
-    Url : Url
-    bodyData : body ? body : null
-    header : header ? header : null
-    params : params ? params : null
+export const apiConnector = (method,Url,bodyData,headers,params)=>{
+
+    return axiosInstance({
+        method : method,
+        url : Url,
+        data : bodyData ? JSON.stringify(bodyData) : null,
+        headers : headers ? headers :  {
+            "Content-type": "application/json; charset=UTF-8"},
+        params : params ? params : null
+    })
+   
 }
