@@ -21,10 +21,11 @@ console.log(response)
     if(response.data.success)
     {
         localStorage.setItem("token",response.data.token)
-        dispatch(setLoggedIn(true))
+        
         dispatch(getUserById())
-        dispatch(getAsideTabs(navigate))
-    //    navigate("/")
+        await dispatch(getAsideTabs(navigate))
+        dispatch(setLoggedIn(true))
+ 
     //   if(asideTabs)
     //   {
     //     navigate("/",{state:{tabData : asideTabs}})

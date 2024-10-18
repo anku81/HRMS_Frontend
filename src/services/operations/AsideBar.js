@@ -16,8 +16,9 @@ export const getAsideTabs = (navigate)=>{
             console.log(response.data.data)
             if(response.data.success)
             {
-            
-                navigate("/", {
+                localStorage.setItem("asideBar",JSON.stringify(response.data.data))
+                
+                navigate("/home", {
                     state: { tabData: response.data.data },
                     replace: true
                   });

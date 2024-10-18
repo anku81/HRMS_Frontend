@@ -1,13 +1,11 @@
 import React from 'react'
 
-const Dashbord = () => {
+const OrganizationListPage = () => {
   return (
     <div>
-
-      <p>dashbord</p>
       
     </div>
   )
 }
 
-export default Dashbord
+export default OrganizationListPage

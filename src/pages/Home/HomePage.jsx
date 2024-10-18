@@ -23,7 +23,7 @@ const [data,setData] = useState([])
  
 // }
 useEffect(()=>{
-  const tabData = location.state?.tabData
+  const tabData = location.state?.tabData || JSON.parse(localStorage.getItem("asideBar"))
   setData(tabData)
 },[])
  
@@ -46,7 +46,7 @@ function handleClick(label)
  
   return (
     <>
-    <div className=' border border-neutral-950 h-[90vh]'>
+    <div className=' border border-neutral-950 h-[90vh] flex'>
       
       <div className='border border-slate-800  h-full w-[20vw] p-3  overflow-y-scroll'>
         <div className='flex flex-col gap-4 text-[1.3rem] ' >
@@ -73,6 +73,7 @@ function handleClick(label)
                    && item.children 
                    && item.children.map((elem,index)=><p 
                    key={index}
+                   onClick={()=>navigate(`${elem.label.replace(" ","-")}`)}
                    className='pl-7 text-lg flex items-center gap-3'>
                     {elem.label.includes("Create") ? <IoPersonAdd /> : <BiCircle />}{elem.label}
                     </p>) 

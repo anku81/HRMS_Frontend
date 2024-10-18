@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { CgProfile } from "react-icons/cg";
 
 
-const CreateOrg = () => {
+
+
+
+
+const CreateOrganization = () => {
   const [image, setImage] = useState(null);
 
   const handleImageChange = (event) => {
@@ -78,4 +82,4 @@ const CreateOrg = () => {
   );
 };
 
-export default CreateOrg;
+export default CreateOrganization;
