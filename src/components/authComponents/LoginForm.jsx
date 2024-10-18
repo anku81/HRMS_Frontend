@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/operations/auth";
-
+import Avisoft from "../../assets/Avisoft.svg"
 const LoginForm = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -13,17 +13,24 @@ const LoginForm = () => {
     formState: { errors,isSubmitting },
   } = useForm();
   return (
-  
-     
-<div className="bg-blue-300 rounded-lg border w-1/2 min-w-60 border-green-500 " >
+
+    <div className="flex flex-col"> 
+     <div className='flex  mt-20 justify-center gap-4'>
+         <div>
+      <img className="h-32 w-32 p-2" src={Avisoft} alt="Avi Logo" />
+       <h3 className='font-serif font-bold text-2xl'> Sign-In Portal</h3>
+        </div>
+       </div>
+
+<div className="bg-gray-300 rounded-lg border w-1/2 min-w-60 " >
           <div>
-            <h1 className="text-2xl font-bold font-serief text-center pt-5 text-gray-800 mb-4">
+            <h1 className="text-2xl font-bold font-serif text-center pt-5 text-gray-800 mb-4">
               Sign in to your Account
             </h1>
           </div>
 
           <form  className="p-4 flex flex-col rounded-r-lg "  onSubmit={handleSubmit((data) =>dispatch(login(data.email,data.password,navigate)))}>
-        
+
             <div className=" flex flex-col space-y-5">
               
               <label htmlFor="email" className=" font-bold text-gray-800 font-serif">Enter your email: </label>
@@ -60,6 +67,7 @@ const LoginForm = () => {
                
             </input>
           </form>
+        </div>
         </div>
 
   );

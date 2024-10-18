@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import ThemeLogo from '../../assets/Theme.png';
-import AviLogo from '../../assets/avi-loft.png';
+import Avisoft from '../../assets/Avisoft.svg';
 import { WiDaySunny } from "react-icons/wi";
 import { WiNightAltCloudy } from "react-icons/wi";
 import { useSelector } from 'react-redux';
@@ -12,9 +11,9 @@ const NavBar = () => {
 const [theme,setTheme]=useState(false)
   return (
     <>
-      <nav className="w-full h-[10vh] flex flex-row items-center justify-between rounded-b-lg  drop-shadow-xl px-4">
+      <nav className="  w-full h-[10vh] border flex flex-row items-center justify-between rounded-b-lg  shadow-xl px-3">
         <div className="flex items-center">
-          <img className="h-12 w-12 p-2" src={AviLogo} alt="Avi Logo" />
+          <img className="h-12 w-12 p-2" src={Avisoft} alt="Avi Logo" />
         </div>
 
         <div className="flex items-center gap-5">
