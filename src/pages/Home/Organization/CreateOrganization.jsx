@@ -28,7 +28,7 @@ const CreateOrganization = () => {
             {image ? (
               <img src={image} alt="Organization Logo" className="w-full h-full object-cover rounded-full" />
             ) : (
-              <p className=''><CgProfile /></p>
+              <p className=''><CgProfile size={30} /></p>
             )}
           </div>
 

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import Tooltip from './Tooltip'
 
 const UserData = () => {
 
   const user = useSelector((state)=>state.User)
   const [userData,setUserData] = useState({name:"",role:""})
-
+  const [clicked,setClicked] = useState(false)
   const fetchData = ()=>{
     setUserData(()=>{
       return {
@@ -22,8 +23,16 @@ const UserData = () => {
   console.log(userData)
   return (
     <>
-    <div className='flex items-center'>
-        
+    <div 
+    onClick={(e)=>{
+      e.preventDefault()
+      setClicked(!clicked)
+    }}
+    className='flex items-center '>
+
+       {
+       clicked &&   <Tooltip/>
+       }
           <img
           className='border h-10 w-10 rounded-full'
          
