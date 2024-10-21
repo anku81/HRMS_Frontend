@@ -9,7 +9,7 @@ const EmployeeList = () => {
   const data = useSelector((state)=>state.Aside.filteredEmployees)
   const departmentData = useSelector((state)=>state.Aside.departments)
   
-  const [departmentId,setDepartmentId]= useState("unAssigned")
+  const [departmentId,setDepartmentId]= useState("All")
   useEffect(()=>{
       dispatch(getAllDepartments())
       dispatch(getAllEmployees())
@@ -19,7 +19,7 @@ const EmployeeList = () => {
   // useEffect(()=>{
   //     dispatch(getSubOrganizationsByOrganizations(departmentId))
   // },[departmentId])
-  console.log("departmentIIIId=====>>>>>.",data )
+  console.log("departmentIIIId=====>>>>>.",departmentId )
 
   function deleteHandler(id){
 console.log(id)
@@ -33,8 +33,9 @@ return (
       <div>
           <select onChange={(e)=>{
               e.preventDefault()
-              setDepartmentId(e.target.value)
-              if(e.target.value=="unAssigned")
+               setDepartmentId(e.target.value)
+              console.log("Changed========>",e.target.value)
+              if(e.target.value=="All")
               {
                   dispatch(getAllEmployees())
                   console.log("Changed========>",e.target.value)
@@ -45,7 +46,7 @@ return (
             }
               
           }}>
-              <option value={"unAssigned"}>All Employees</option>
+              <option value={"All"}>All Employees</option>
               {
                   departmentData && departmentData.map((item)=><option value={item?._id}>{item.name}</option>)
               }
