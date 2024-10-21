@@ -15,6 +15,12 @@ const data = useSelector((state)=>state.Aside.organizations)
   },[])
 
   console.log("OrganizationList==========>>>>>>>",data)
+  function deleteHandler(id){
+    console.log(id)
+      }
+      function editHandler(){
+    
+      }
   return (
     <div className='w-full p-5 border rounded-lg'>
      <div className='border rounded-lg overflow-hidden'>
@@ -42,8 +48,12 @@ const data = useSelector((state)=>state.Aside.organizations)
           <td>{item.description.substring(0,20)}...</td>
           <td >
           <div className='flex items-center gap-3'>
-          <FiEdit />
-          <MdDelete />
+          <FiEdit 
+        onClick={editHandler}
+        />
+        <MdDelete
+        onClick={()=>deleteHandler(item._id)}
+        />
           </div>
           </td>
         </tr>))

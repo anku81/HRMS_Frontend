@@ -98,7 +98,7 @@ function handleClick(label)
         </div>
         </div>
 
-        <div className='border w-full'>
+        <div className='border w-full overflow-y-scroll'>
         <Outlet/>
         </div>
     </div>

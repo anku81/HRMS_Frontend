@@ -5,7 +5,7 @@ import { setFilteredSubOrganizations, setOrganizations, setSubOrganizations } fr
 
 
 const {ASIDE,ORGANIZATIONLIST,SUBORGANIZATIONLIST,
-    SUBORGANIZATIONSBYORGANIZATIONS
+    SUBORGANIZATIONSBYORGANIZATIONS,UNASSIGNEDSUBORGANIZATIONS
 } = AsideBarEndPoints
 
 export const getAsideTabs = (navigate)=>{
@@ -124,4 +124,26 @@ export const getSubOrganizationsByOrganizations = (organizationId,page=1,limit=1
      
        }
    
+}
+
+export const getUnassignedSubOrganizations =(page=1,limit=10)=>{
+    return async(dispatch)=>{
+        try{
+            const newUrl = `${UNASSIGNEDSUBORGANIZATIONS}/?page=${page}&limit=${limit}`
+            console.log("UNASSISBHSBBK",newUrl)
+            const token = localStorage.getItem("token")
+            const response = await apiConnector("GET",newUrl,{},{
+                "Content-type": "application/json; charset=UTF-8",
+                "Authorization" : `Bearer ${token}`
+            })
+
+            console.log(response)
+            if(response.data.success)
+            {
+                dispatch(setFilteredSubOrganizations(response.data.data))
+            }
+        } catch (err){
+
+    }
+}
 }

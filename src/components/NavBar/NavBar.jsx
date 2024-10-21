@@ -11,9 +11,9 @@ const NavBar = () => {
 const [theme,setTheme]=useState(false)
   return (
     <>
-      <nav className="  w-full h-[10vh] border flex flex-row items-center justify-between rounded-b-lg  shadow-xl px-3">
+      <nav className="w-full h-[10vh] border flex flex-row items-center justify-between rounded-b-lg  shadow-xl px-9">
         <div className="flex items-center">
-          <img className="h-12 w-12 p-2" src={Avisoft} alt="Avi Logo" />
+          <img className="h-20 w-20 p-2" src={Avisoft} alt="Avi Logo" />
         </div>
 
         <div className="flex items-center gap-5">

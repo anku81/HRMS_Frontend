@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getOrganizations, getSubOrganizations, getSubOrganizationsByOrganizations } from '../../../services/operations/AsideBar'
+import { getOrganizations, getSubOrganizations, getSubOrganizationsByOrganizations, getUnassignedSubOrganizations } from '../../../services/operations/AsideBar'
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 const SubOrganizationList = () => {
     const dispatch = useDispatch()
     const data = useSelector((state)=>state.Aside.filteredSubOrganizations)
     const organizationData = useSelector((state)=>state.Aside.organizations)
-    const [organizationId,setOrganizationId]= useState("6705871eefebfc8fa7b77f51")
+    
+    const [organizationId,setOrganizationId]= useState("unAssigned")
     useEffect(()=>{
         dispatch(getOrganizations())
-        dispatch(getSubOrganizationsByOrganizations(organizationId))
+        dispatch(getUnassignedSubOrganizations())
+        // dispatch(getSubOrganizationsByOrganizations(organizationId))
     //    dispatch(getSubOrganizations())
     },[])
+    // useEffect(()=>{
+    //     dispatch(getSubOrganizationsByOrganizations(organizationId))
+    // },[organizationId])
     console.log("organizationId=====>>>>>.",organizationId)
+
+    function deleteHandler(id){
+        console.log(id)
+          }
+          function editHandler(){
+    
+          }
   return (
     <div className='p-5'>
 
@@ -21,8 +33,18 @@ const SubOrganizationList = () => {
             <select onChange={(e)=>{
                 e.preventDefault()
                 setOrganizationId(e.target.value)
+                if(e.target.value=="unAssigned")
+                {
+                    dispatch(getUnassignedSubOrganizations())
+                    console.log("Changed========>",e.target.value)
+                
+                }
+              else{
+                dispatch(getSubOrganizationsByOrganizations(e.target.value))
+              }
+                
             }}>
-                <option>Unassigned Sub Organization</option>
+                <option value={"unAssigned"}>Unassigned Sub Organization</option>
                 {
                     organizationData && organizationData.map((item)=><option value={item?._id}>{item.name}</option>)
                 }
@@ -51,8 +73,12 @@ const SubOrganizationList = () => {
           <td>{item.organization ? item.organization :<button className='bg-yellow-300 p-2'>Assign</button>}</td>
           <td >
           <div className='flex items-center gap-3'>
-          <FiEdit />
-          <MdDelete />
+          <FiEdit 
+        onClick={editHandler}
+        />
+        <MdDelete
+        onClick={()=>deleteHandler(item._id)}
+        />
           </div>
           </td>
         </tr>))
