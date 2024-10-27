@@ -3,8 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getOrganizations, getSubOrganizations, getSubOrganizationsByOrganizations, getUnassignedSubOrganizations } from '../../../services/operations/AsideBar'
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
+import { deleteSubOrganization } from '../../../services/operations/SubOrganization';
+import { useNavigate } from 'react-router-dom';
 const SubOrganizationList = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const data = useSelector((state)=>state.Aside.filteredSubOrganizations)
     const organizationData = useSelector((state)=>state.Aside.organizations)
     
@@ -20,12 +23,15 @@ const SubOrganizationList = () => {
     // },[organizationId])
     console.log("organizationId=====>>>>>.",organizationId)
 
-    function deleteHandler(id){
+    function deleteHandler(orgId,id){
         console.log(id)
+        dispatch(deleteSubOrganization(orgId,id))
           }
-          function editHandler(){
+function editHandler(data){
+    // console.log("{{{{{{{{{{{{{{{{{",data)
+    navigate("/home/Create-Sub-Organization",{state : {preFilled : data }})
+          }
     
-          }
   return (
     <div className='p-5'>
 
@@ -74,10 +80,10 @@ const SubOrganizationList = () => {
           <td >
           <div className='flex items-center gap-3'>
           <FiEdit 
-        onClick={editHandler}
+        onClick={()=>editHandler(item)}
         />
         <MdDelete
-        onClick={()=>deleteHandler(item._id)}
+        onClick={()=>deleteHandler(item.organization,item._id)}
         />
           </div>
           </td>

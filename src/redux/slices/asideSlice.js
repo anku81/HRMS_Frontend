@@ -8,7 +8,9 @@ const initialState = {
     filteredSubOrganizations:[],
     filteredDepartments : [],
     roles : [],
-    filteredEmployees :[]
+    filteredEmployees :[],
+    searchList : [],
+    accessList:[]
 }
 const asideSlice = createSlice({
     name : "Aside",
@@ -42,8 +44,18 @@ const asideSlice = createSlice({
         setFilteredEmployees : (state,action)=>{
             state.filteredEmployees = action.payload
         },
+        setSearchList : (state,action)=>{
+          
+            state.searchList = action.payload
+
+        },
+        setAccessList : (state,action)=>{
+          
+            state.accessList = action.payload
+
+        },
     }
 })
 
-export const {setOrganizations,setSubOrganizations,setDepartments,setFilteredSubOrganizations,setFilteredDepartments,setRolesData,setEmployees,setFilteredEmployees}=asideSlice.actions
+export const {setOrganizations,setSubOrganizations,setDepartments,setFilteredSubOrganizations,setFilteredDepartments,setRolesData,setEmployees,setFilteredEmployees,setSearchList,setAccessList}=asideSlice.actions
 export default asideSlice.reducer

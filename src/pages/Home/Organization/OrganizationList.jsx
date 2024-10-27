@@ -3,10 +3,13 @@ import { getOrganizations } from '../../../services/operations/AsideBar'
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
+import { deleteOrganization } from '../../../services/operations/Organization';
+import { useNavigate } from 'react-router-dom';
 
 const OrganizationList = () => {
 
 const dispatch = useDispatch()
+const navigate = useNavigate()
 const data = useSelector((state)=>state.Aside.organizations)
 
   useEffect(()=>{
@@ -17,9 +20,11 @@ const data = useSelector((state)=>state.Aside.organizations)
   console.log("OrganizationList==========>>>>>>>",data)
   function deleteHandler(id){
     console.log(id)
-      }
-      function editHandler(){
+    dispatch(deleteOrganization(id))
     
+      }
+ function editHandler(data){
+  navigate("/home/Create-Organization",{state : {preFilled : data }})
       }
   return (
     <div className='w-full p-5 border rounded-lg'>
@@ -49,7 +54,7 @@ const data = useSelector((state)=>state.Aside.organizations)
           <td >
           <div className='flex items-center gap-3'>
           <FiEdit 
-        onClick={editHandler}
+        onClick={()=>editHandler(item)}
         />
         <MdDelete
         onClick={()=>deleteHandler(item._id)}

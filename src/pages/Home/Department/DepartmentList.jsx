@@ -4,12 +4,15 @@ import { getOrganizations } from '../../../services/operations/AsideBar'
 import { getDepartmentsByOrganization, getUnassignedDepartments } from '../../../services/operations/Department'
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
+import { getEmployeeById } from '../../../services/operations/Employee';
 
 const DepartmentList = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const data = useSelector((state)=>state.Aside.filteredDepartments)
   const organizationData = useSelector((state)=>state.Aside.organizations)
-  
+  const manager = useSelector((state)=>state.Aside.employees)
   const [organizationId,setOrganizationId]= useState("unAssigned")
   useEffect(()=>{
   
@@ -24,8 +27,14 @@ const DepartmentList = () => {
   function deleteHandler(id){
     console.log(id)
       }
-      function editHandler(){
-    
+  async function editHandler(data){
+   
+    const newData = {...data}
+    console.log("newDatanewDatanewDatanewDatanewDatanewDatanewDatanewDatanewDatanewDatanewDatanewDatanewDatanewDatanewDatanewDatanewDatanewDatanewData",newData)
+    await dispatch(getEmployeeById(data.manager))
+    newData.manager = manager?.personalDetails?.firstName+" "+manager?.personalDetails?.lastName
+    console.log("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",newData.manager)
+    navigate("/home/Create-Department",{state : {preFilled : newData }})
       }
 return (
   <div className='p-5 '>
@@ -80,7 +89,7 @@ return (
         <td >
         <div className='flex items-center gap-3'>
         <FiEdit 
-        onClick={editHandler}
+        onClick={()=>editHandler(item)}
         />
         <MdDelete
         onClick={()=>deleteHandler(item._id)}

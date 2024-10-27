@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { getAllRoles } from '../../../services/operations/Roles';
+import { useNavigate } from 'react-router-dom';
 const RoleList = () => {
   const data = useSelector((state)=>state.Aside.roles)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   useEffect(()=>{
     dispatch(getAllRoles())
   },[])
@@ -13,8 +15,8 @@ const RoleList = () => {
   function deleteHandler(id){
     console.log(id)
       }
-      function editHandler(){
-    
+      function editHandler(data){
+        navigate("/home/Create-Role",{state : {preFilled : data}})
       }
   return (
     <div className='w-full p-5 border rounded-lg'>
@@ -38,7 +40,7 @@ const RoleList = () => {
          <td >
          <div className='flex items-center gap-3'>
          <FiEdit 
-        onClick={editHandler}
+        onClick={()=>editHandler(item)}
         />
         <MdDelete
         onClick={()=>deleteHandler(item._id)}
