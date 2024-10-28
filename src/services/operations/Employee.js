@@ -10,7 +10,7 @@ const {GET_EMPLOYEES_BY_NAME,GET_EMPLOYEES_BY_PDetails} = Employee_EndPoints
 export const getUserById = ()=>{
     return async(dispatch)=>{
         const token = localStorage.getItem("token")
-        const response = await apiConnector("GET",GETUSERBYID,{},{
+        const response = await apiConnector("GET",`${GETUSERBYID}/${null}`,{},{
             "Content-type": "application/json; charset=UTF-8",
             "Authorization" : `Bearer ${token}`
         }

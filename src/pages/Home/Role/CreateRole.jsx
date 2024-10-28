@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { getFullAccessList } from "../../../services/operations/Access";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { addRole } from "../../../services/operations/Roles";
+import { addRole, editRole } from "../../../services/operations/Roles";
 import { AiOutlineCheck } from "react-icons/ai";
 const CreateRole = () => {
   const location = useLocation();
@@ -93,14 +93,17 @@ const [checks, setChecks] = useState({})
     };
   }
 
-  function submissionHandler(data) {
+  function submissionHandler(roleName) {
     // console.log(data);
     const accessList = [];
     for (let key in checks) {
       checks[key] && accessList.push(key);
     }
-    console.log(data,accessList);
-    // dispatch(addRole(data.roleName,accessList))
+    console.log(roleName,accessList);
+
+    preFilled 
+    ? dispatch(editRole(preFilled?._id,roleName,accessList))
+    : dispatch(addRole(roleName,accessList))
   }
 
   function tabHandler(e, item) {
@@ -135,7 +138,7 @@ const [checks, setChecks] = useState({})
      }
     }
   }
-
+console.log(preFilled)
   
   // console.log(checks,currTab)
   return (
@@ -161,6 +164,7 @@ const [checks, setChecks] = useState({})
           <sup>Role Name *</sup>
           <input
             className="border m-2 p-2 shadow-md rounded"
+            defaultValue={preFilled?.title}
             placeholder="Enter Role name "
             {...register("roleName", { required: true })}
           />
@@ -222,7 +226,7 @@ const [checks, setChecks] = useState({})
                   <input
                     type="checkbox"
                     className={`w-4 h-4 appearance-none mr-2 border-2 border-gray-300 rounded ${checks[item] || selectCategory.includes(currTab) ? "border-blue-500 bg-blue-500" : ""}`}
-                    onChange={(e) => checkHandler(e)}
+                    onClick={(e) => checkHandler(e)}
                 
                     // checked={checks[item] || selectCategory.includes(currTab) ? true :  false}
                   

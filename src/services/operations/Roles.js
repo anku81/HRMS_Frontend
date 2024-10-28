@@ -31,21 +31,24 @@ export const addRole  = (title,accessList)=>{
     return async(dispatch)=>{
         try
         {
+            console.log(title,accessList)
             const token = localStorage.getItem("token")
         
             const body = {
                 title : title,
-                accessList:accessList
+                roleAccessList:accessList
             }
+            console.log(ADD_ROLE,body)
             const response = await apiConnector("POST",ADD_ROLE,body,{
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization" : `Bearer ${token}`
             })
 
             console.log(response)
+
             if(response.data.success)
             {
-                dispatch(setRolesData(response.data.data))
+                // dispatch(setRolesData(response.data.data))
             }
         } catch(err){
             console.log(err)
@@ -57,12 +60,14 @@ export const editRole  = (roleId,title,accessList)=>{
     return async(dispatch)=>{
         try
         {
+      
             const token = localStorage.getItem("token")
             const newUrl = `${EDIT_ROLE}/${roleId}`
             const body = {
                 title : title,
-                accessList:accessList
+                roleAccessList:accessList
             }
+        
             const response = await apiConnector("PUT",newUrl,body,{
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization" : `Bearer ${token}`
@@ -71,7 +76,7 @@ export const editRole  = (roleId,title,accessList)=>{
             console.log(response)
             if(response.data.success)
             {
-                dispatch(setRolesData(response.data.data))
+                
             }
         } catch(err){
             console.log(err)
@@ -92,10 +97,10 @@ export const deleteRole  = (roleId)=>{
             })
 
             console.log(response)
-            if(response.data.success)
-            {
-                dispatch(setRolesData(response.data.data))
-            }
+            // if(response.data.success)
+            // {
+                
+            // }
         } catch(err){
             console.log(err)
         }

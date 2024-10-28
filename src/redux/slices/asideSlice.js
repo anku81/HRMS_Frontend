@@ -36,6 +36,7 @@ const asideSlice = createSlice({
             state.filteredDepartments = action.payload
         },
         setRolesData : (state,action)=>{
+            console.log(action.payload)
             state.roles = action.payload
         },
         setEmployees : (state,action)=>{

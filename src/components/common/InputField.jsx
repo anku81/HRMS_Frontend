@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-const InputField = React.forwardRef(({ label, error, ...props }, ref) => {
+const InputField = React.forwardRef(({ label, error, ...props },ref) => {
 
    
     return (
