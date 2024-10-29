@@ -59,7 +59,16 @@ export const Attribute_EndPoints ={
 
 export const Employee_EndPoints = {
     GET_EMPLOYEES_BY_NAME : BaseUrl + "/api/v1/searchEmployeeByName",
-    GET_EMPLOYEES_BY_PDetails : BaseUrl +"/api/v1/getEmployeeDetailsbyPID"
+    GET_EMPLOYEES_BY_PDetails : BaseUrl +"/api/v1/getEmployeeDetailsbyPID",
+    ADD_EMPLOYEE : BaseUrl + "/api/v1/createEmployee",
+    ADD_PERSONAL_DETAILS : BaseUrl + "/api/v1/createProfile",
+    ADD_ADDITIONAL_DETAILS : BaseUrl + "/api/v1/createAdditionalDetails",
+    EDIT_PERSONAL_DETAILS : BaseUrl + "/api/v1/editProfile",
+    EDIT_ADDITIONAL_DETAILS : BaseUrl + "/api/v1/editAdditionalDetails",
+    DELETE_EMPLOYEE : BaseUrl + "/api/v1/deleteEmployee",
+    ASSIGN_DEPARTMENT_TO_EMPLOYEE : BaseUrl + "/api/v1/assignDepartment",
+    REMOVE_EMPLOYEE_FROM_DEPARTMENT : BaseUrl + "/api/v1/unAssignDepartment"
+
 }
 
 export const Access_EndPoints = {

@@ -6,7 +6,9 @@ import { AuthEndpoints, Employee_EndPoints } from "../apis"
 
 
 const {GETUSERBYID,GET_ALL_EMPLOYEES,GET_EMPLOYEES_BY_DEPARTMENT} = AuthEndpoints
-const {GET_EMPLOYEES_BY_NAME,GET_EMPLOYEES_BY_PDetails} = Employee_EndPoints
+const {GET_EMPLOYEES_BY_NAME,GET_EMPLOYEES_BY_PDetails,ADD_EMPLOYEE,ADD_PERSONAL_DETAILS,ADD_ADDITIONAL_DETAILS,EDIT_PERSONAL_DETAILS,EDIT_ADDITIONAL_DETAILS,DELETE_EMPLOYEE,ASSIGN_DEPARTMENT_TO_EMPLOYEE,REMOVE_EMPLOYEE_FROM_DEPARTMENT} = Employee_EndPoints
+
+
 export const getUserById = ()=>{
     return async(dispatch)=>{
         const token = localStorage.getItem("token")

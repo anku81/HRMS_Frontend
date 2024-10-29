@@ -11,6 +11,7 @@ import InputField from '../common/InputField';
 import SearchResult from './SearchResult';
 import { getEmployeeById, getEmployeesByName } from '../../services/operations/Employee';
 import { addDepartment } from '../../services/operations/Department';
+import PersonalDetailsForm from './Employee Form/PersonalDetailsForm';
 const CreateForm = ({customAttributes,parent}) => {
   const location = useLocation()
 
@@ -19,6 +20,7 @@ const CreateForm = ({customAttributes,parent}) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [managerId,setManagerId] = useState(null)
     const OrganizationList = useSelector((state)=>state.Aside.organizations)
+    const departmentList = useSelector((state)=>state.Aside.departments)
     const searchList = useSelector((state)=>state.Aside.searchList)
    
     const dispatch = useDispatch()
@@ -103,6 +105,10 @@ const CreateForm = ({customAttributes,parent}) => {
           }
           dispatch(addDepartment(data.name,data.description,customAttributes,data.organizationId,managerId))
         }
+        else if(parent==="Employee")
+        {
+          console.log(data)
+        }
       }
 
 
@@ -123,11 +129,6 @@ console.log("MANAGER___IDDD",managerId,parent)
             >{manageAttributes?"Back":"Manage Attributes"}</button>
 
 
-
-
-
-
-
         {
             !manageAttributes &&    
             
@@ -138,7 +139,7 @@ console.log("MANAGER___IDDD",managerId,parent)
 
 
         {
-          ((parent==="SubOrganization" || parent==="Department") && !preFilled) &&  
+          ((parent==="SubOrganization" || parent==="Department" || parent==="Employee") && !preFilled) &&  
            <div>
           <label htmlFor="organizationId">Select a organization</label>
           <select id="organizationId" {...register("organizationId", { required: true })}>
@@ -147,7 +148,7 @@ console.log("MANAGER___IDDD",managerId,parent)
           OrganizationList && OrganizationList.map((item)=>  <option value={item._id}>{item.name}</option>)
           }
              
-            
+             
             
           </select>
           {errors.organizationId && <p>This field is required</p>}
@@ -155,17 +156,25 @@ console.log("MANAGER___IDDD",managerId,parent)
         }
       
      {
-      parent==="Organization"  &&   <div className='flex flex-col'> 
+     ( parent==="Organization" || parent==="Employee")  &&   <div className='flex flex-col'> 
 
       
       <div className='flex gap-7 items-center'>
        <div className='border w-16 h-16 rounded-full'></div>
 
    <div className='flex flex-col'>
-       <p>Add Organization logo</p>
+       <p>{ parent==="Employee" ? "Upload Employee Profile picture" :"Add Organization logo"}</p>
+   <div className='flex gap-6'>
    <label
        className='cursor-pointer bg-black text-white px-4 py-2 rounded mt-2'
            htmlFor='file'>Select</label>
+           <button 
+           onClick={(e)=>{
+            e.preventDefault()
+            console.log("UPLOAD EMPLOYEE PICTURE")
+           }}
+           className='cursor-pointer bg-yellow-400 text-black px-4 py-2 rounded mt-2'>Upload</button>
+   </div>
        <input 
         type='file'
            className=' max-w-72 p-2 border border-gray-400 rounded hidden'
@@ -188,17 +197,66 @@ console.log("MANAGER___IDDD",managerId,parent)
          {...register('name', { required: true })} />
          {errors.name && <p>Name is required.</p>} */}
 
-         <InputField
+      {
+         parent!=="Employee"  &&  <InputField
          label ={`${parent} Name`}
          id='name'
          defaultValue={preFilled?preFilled?.name:""}
         {...register('name', { required: true })} 
         errors={errors.name}
          />
+      }
 
 
       </div>
-   
+
+     {
+      parent=="Employee" &&  <PersonalDetailsForm/>
+     }
+    {   parent=="Employee" && <p>Personal Info</p>}
+     {
+       
+
+       parent=="Employee" &&  <div className='flex flex-wrap justify-center gap-6 '>
+        <InputField
+       
+         label={`First Name`}
+         placeholder={`First Name`}
+         {...register('firstName', { required: true })}
+         />
+
+<InputField
+          label={`Last Name`}
+          placeholder={`Last Name`}
+          {...register('lastName', { required: true })}
+         />
+
+<InputField
+          label={`Employee Code`}
+          placeholder={`Employee Code`}
+          {...register('employeeCode', { required: true })}
+         />
+
+
+        </div>
+     }
+
+     {
+      parent=="Employee"  && <div>
+      <label htmlFor="departmentId">Select Department</label>
+      <select id="departmentId" {...register("departmentId", { required: true })}>
+      <option value="">--Select--</option>
+      {
+      departmentList && departmentList.map((item)=>  <option value={item._id}>{item.name}</option>)
+      }
+         
+         
+        
+      </select>
+      {errors.organizationId && <p>This field is required</p>}
+  </div>
+     }
+     
     {  (parent==="Organization" || parent==="Department") &&   <div className='flex flex-col'>
            {/* <label htmlFor='description'>{parent} Description</label>
        <input 
