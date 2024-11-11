@@ -10,7 +10,12 @@ const initialState = {
     roles : [],
     filteredEmployees :[],
     searchList : [],
-    accessList:[]
+    accessList:[],
+    isLastOrg :false,
+    isLastSubOrg :false,
+    isLastDep :false,
+    isLastEmp :false,
+    attendenceData : []
 }
 const asideSlice = createSlice({
     name : "Aside",
@@ -55,8 +60,23 @@ const asideSlice = createSlice({
             state.accessList = action.payload
 
         },
+        setIsLastOrg : (state,action)=>{
+            state.isLastOrg = action.payload
+        },
+        setIsLastSubOrg : (state,action)=>{
+            state.isLastSubOrg = action.payload
+        },
+        setIsLastDep : (state,action)=>{
+            state.isLastDep = action.payload
+        },
+        setIsLastEmp : (state,action)=>{
+            state.isLastEmp = action.payload
+        },
+        setAttendenceData : (state,action)=>{
+            state.attendenceData = action.payload
+        }
     }
 })
 
-export const {setOrganizations,setSubOrganizations,setDepartments,setFilteredSubOrganizations,setFilteredDepartments,setRolesData,setEmployees,setFilteredEmployees,setSearchList,setAccessList}=asideSlice.actions
+export const {setOrganizations,setSubOrganizations,setDepartments,setFilteredSubOrganizations,setFilteredDepartments,setRolesData,setEmployees,setFilteredEmployees,setSearchList,setAccessList,setIsLastOrg,setIsLastSubOrg,setIsLastDep,setIsLastEmp,setAttendenceData}=asideSlice.actions
 export default asideSlice.reducer

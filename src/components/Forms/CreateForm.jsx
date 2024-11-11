@@ -4,18 +4,22 @@ import AttributeList from './AttributeList';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAttribute } from '../../services/operations/Attribute';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { addOrganization } from '../../services/operations/Organization';
+import { addOrganization, editOrganization } from '../../services/operations/Organization';
 import ManageAttributes from './ManageAttributes';
-import { addSubOrganization } from '../../services/operations/SubOrganization';
+import { addSubOrganization, editSubOrganization } from '../../services/operations/SubOrganization';
 import InputField from '../common/InputField';
 import SearchResult from './SearchResult';
-import { getEmployeeById, getEmployeesByName } from '../../services/operations/Employee';
-import { addDepartment } from '../../services/operations/Department';
+import { addEmployeePersonalDetails, editEmployeePersonalDetails, getEmployeeById, getEmployeesByName } from '../../services/operations/Employee';
+import { addDepartment, editDepartment } from '../../services/operations/Department';
 import PersonalDetailsForm from './Employee Form/PersonalDetailsForm';
-const CreateForm = ({customAttributes,parent}) => {
+
+
+
+const CreateForm = ({customAttributes,parent,userId,setFormState,formState}) => {
   const location = useLocation()
 
   const preFilled = location.state?.preFilled
+
     const [manageAttributes,setManageAttributes] = useState(false)
     const [searchTerm, setSearchTerm] = useState("");
     const [managerId,setManagerId] = useState(null)
@@ -35,6 +39,20 @@ const CreateForm = ({customAttributes,parent}) => {
         formState: { errors },
       } = useForm();
 
+      const [preview, setPreview] = preFilled? useState(preFilled?.personalDetails?.profilePicture) : useState(null);
+      useEffect(()=>{
+        console.log(preview)
+      },[preview])
+      const handleImagePreview = (e) => {
+        console.log(e)
+        const file = e.target.files[0];
+        if (file) {
+          setPreview(URL.createObjectURL(file));
+        } else {
+          setPreview(null); // Reset preview if no file is selected
+        }
+      };
+      
       useEffect(()=>{
         let timerId;
         if (searchTerm.trim() !== "")
@@ -60,10 +78,10 @@ const CreateForm = ({customAttributes,parent}) => {
           reset()
         }
       }, [preFilled]);
-      
+      console.log(typeof parent)
       function submissionHandler(data)
       {
-        console.log("DATTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTt",data)
+        console.log("DATTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTt",data,parent)
 
         if(parent==="Organization")
         {
@@ -75,12 +93,16 @@ const CreateForm = ({customAttributes,parent}) => {
                     customAttributes.push({title:key,value:data[key]})
                 }
             }
+            console.log(data,preview)
+            console.log(preFilled,preFilled?._id)
             // console.log("customAttributes Array",customAttributes)
-            dispatch(addOrganization(data.name,data.description,customAttributes,data.file[0]))
+            preFilled ? dispatch(editOrganization(data.name,data.description,customAttributes,data.file[0],preFilled?._id))
+
+            : dispatch(addOrganization(data.name,data.description,customAttributes,data.file[0]))
         }
         else if(parent==="SubOrganization")
         {
-          console.log(data)
+          console.log(data,preFilled)
           const customAttributes = []
           for(let key in data)
           {
@@ -89,12 +111,13 @@ const CreateForm = ({customAttributes,parent}) => {
                   customAttributes.push({title:key,value:data[key]})
               }
           }
-            dispatch(addSubOrganization(data.name,customAttributes,data.organizationId))
+          preFilled ? dispatch(editSubOrganization(data.name,customAttributes,preFilled?._id))
+           : dispatch(addSubOrganization(data.name,customAttributes,data.organizationId))
         }
         else if(parent==="Department")
         {
 
-          console.log("DATTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTt",data)
+          // console.log("DATTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTt",data)
           const customAttributes = []
           for(let key in data)
           {
@@ -103,11 +126,24 @@ const CreateForm = ({customAttributes,parent}) => {
                   customAttributes.push({title:key,value:data[key]})
               }
           }
-          dispatch(addDepartment(data.name,data.description,customAttributes,data.organizationId,managerId))
+          preFilled ? dispatch(editDepartment(data.name,data.description,customAttributes,preFilled.organizationId,managerId,preFilled?._id)) : dispatch(addDepartment(data.name,data.description,customAttributes,data.organizationId,managerId))
         }
-        else if(parent==="Employee")
+        else if(parent=="Employee")
         {
-          console.log(data)
+
+          const customAttributes = []
+          for(let key in data)
+          {
+              if(key!=="firstName" && key!=="lastName" && key!=="departmentId" && key!=="file" && key!=="employeeCode"  )
+              {
+                  customAttributes.push({title:key,value:data[key]})
+              }
+          }
+          console.log(customAttributes)
+          preFilled? 
+         dispatch(editEmployeePersonalDetails(data.file[0],data.firstName,data.lastName,data.employeeCode,preFilled?.personalDetails?.department,data?.skills,data?.designation,customAttributes,preFilled?._id,setFormState))
+          :dispatch(addEmployeePersonalDetails(data.file[0],data.firstName,data.lastName,data.employeeCode,data.departmentId,data?.skills,data?.designation,customAttributes,userId,setFormState))
+
         }
       }
 
@@ -115,8 +151,10 @@ const CreateForm = ({customAttributes,parent}) => {
       // console.log("::::::::::::::::::::",location.state,preFilled)
 
 console.log("MANAGER___IDDD",managerId,parent)
-  
 
+
+
+console.log(preview)
 
       return (
         <div className='bg-gray-400 flex justify-center m-4 rounded-lg p-7'>
@@ -139,7 +177,7 @@ console.log("MANAGER___IDDD",managerId,parent)
 
 
         {
-          ((parent==="SubOrganization" || parent==="Department" || parent==="Employee") && !preFilled) &&  
+          ((parent==="SubOrganization" || parent==="Department" || (parent==="Employee" && formState==1) ) && !preFilled) &&  
            <div>
           <label htmlFor="organizationId">Select a organization</label>
           <select id="organizationId" {...register("organizationId", { required: true })}>
@@ -160,7 +198,11 @@ console.log("MANAGER___IDDD",managerId,parent)
 
       
       <div className='flex gap-7 items-center'>
-       <div className='border w-16 h-16 rounded-full'></div>
+       {/* <div className='border w-16 h-16 rounded-full'> */}
+        <img 
+        className='border w-16 h-16 rounded-full flex justify-center items-center'
+        src={preview || preFilled?.logo } alt='DP'></img>
+       {/* </div> */}
 
    <div className='flex flex-col'>
        <p>{ parent==="Employee" ? "Upload Employee Profile picture" :"Add Organization logo"}</p>
@@ -179,7 +221,17 @@ console.log("MANAGER___IDDD",managerId,parent)
         type='file'
            className=' max-w-72 p-2 border border-gray-400 rounded hidden'
            id='file'
-         {...register('file', { required: true })} />
+            accept="image/*"
+           
+         {...register('file',{required : (preFilled?.logo || preFilled?.personalDetails?.profilePicture) ? false : true})} 
+        
+        onChange={(e) => {
+              
+          handleImagePreview(e); 
+          register('file').onChange(e);
+        }}
+
+        />
          {errors.file && <p>file is required.</p>}
    </div>
       </div>
@@ -222,18 +274,21 @@ console.log("MANAGER___IDDD",managerId,parent)
        
          label={`First Name`}
          placeholder={`First Name`}
+         defaultValue={preFilled ? preFilled?.personalDetails?.firstName : ""}
          {...register('firstName', { required: true })}
          />
 
 <InputField
           label={`Last Name`}
           placeholder={`Last Name`}
+          defaultValue={preFilled ? preFilled?.personalDetails?.lastName : ""}
           {...register('lastName', { required: true })}
          />
 
 <InputField
           label={`Employee Code`}
           placeholder={`Employee Code`}
+          defaultValue={preFilled ? preFilled?.personalDetails?.employeeCode : ""}
           {...register('employeeCode', { required: true })}
          />
 
@@ -242,9 +297,14 @@ console.log("MANAGER___IDDD",managerId,parent)
      }
 
      {
-      parent=="Employee"  && <div>
+      (parent=="Employee" && !preFilled)  && <div>
       <label htmlFor="departmentId">Select Department</label>
-      <select id="departmentId" {...register("departmentId", { required: true })}>
+      <select id="departmentId"
+       defaultValue={preFilled && preFilled?.department}
+      
+      {...register("departmentId",
+       
+        { required: true })}>
       <option value="">--Select--</option>
       {
       departmentList && departmentList.map((item)=>  <option value={item._id}>{item.name}</option>)
@@ -341,11 +401,13 @@ console.log("MANAGER___IDDD",managerId,parent)
   {/* {console.log("ooooooooooo",customAttributes,parent)} */}
 {
        customAttributes && customAttributes.map((item,index)=><div className='flex flex-col'>
-           {/* {console.log(preFilled?.customAttributes?.map((elem)=>(elem?.title==item?.title ? item?.title :""))[0],item)} */}
+           {/* {console.log(preFilled?.customAttributes?.map((elem)=>( console.log(elem?.title==item?.title))),"HERE",item,"HERE",preFilled?.customAttributes[0]?.value)} */}
+       
            <label htmlFor='desc'>{item.title}</label>
        <input 
             className=' max-w-72 p-2 border border-gray-400 rounded'
-            defaultValue={preFilled ? preFilled?.customAttributes?.map((elem)=>(elem?.title==item?.title ? item?.title :""))[index] : ""}
+            // defaultValue={preFilled?.customAttributes[0]?.value}
+            defaultValue={preFilled ? parent==="Employee" ? preFilled?.personalDetails?.customAttributes?.map((elem)=>(elem?.title==item?.title ? elem?.value :""))[index] : preFilled?.customAttributes?.map((elem)=>(elem?.title==item?.title ? elem?.value :""))[index] : ""}
            id='desc'
            
          {...register(`${item.title}`, { required: true })} />

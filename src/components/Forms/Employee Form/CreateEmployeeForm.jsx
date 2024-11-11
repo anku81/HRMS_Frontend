@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form';
 import {getOrganizations} from '../../../services/operations/AsideBar'
 import {getAllRoles} from '../../../services/operations/Roles'
+import { addEmployee } from '../../../services/operations/Employee';
 
-const CreateEmployeeForm = () => {
+const CreateEmployeeForm = ({setUserId,setFormState}) => {
     const dispatch = useDispatch()
     useEffect(()=>{
       dispatch(getAllRoles())
@@ -21,9 +22,16 @@ console.log(OrganizationList)
         formState: { errors },
       } = useForm();
 
+const submissionHandler = (email,password,organization,roleId)=>{
+   dispatch(addEmployee(email,password,organization,roleId,setUserId,setFormState))
+  // setUserId(userId)
+  // setFormState(2)
+  
+}
+
   return (
     <div>
-      <form onSubmit={handleSubmit((data) => console.log(data))}>
+      <form onSubmit={handleSubmit((data) =>submissionHandler(data.email,data.password,data.organizationId,data.roleId) )}>
 
       <div>
           <label htmlFor="organizationId">Select a organization</label>

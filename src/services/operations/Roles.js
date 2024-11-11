@@ -27,16 +27,17 @@ export const getAllRoles  = (page =1,limit =10)=>{
     }
 }
 
-export const addRole  = (title,accessList)=>{
+export const addRole  = (title,accessList,selectedCategories)=>{
     return async(dispatch)=>{
         try
         {
-            console.log(title,accessList)
+            console.log(title,accessList,selectedCategories)
             const token = localStorage.getItem("token")
         
             const body = {
                 title : title,
-                roleAccessList:accessList
+                roleAccessList:accessList,
+                selectedCategories : selectedCategories
             }
             console.log(ADD_ROLE,body)
             const response = await apiConnector("POST",ADD_ROLE,body,{
@@ -56,28 +57,29 @@ export const addRole  = (title,accessList)=>{
     }
 }
 
-export const editRole  = (roleId,title,accessList)=>{
+export const editRole  = (roleId,title,accessList,selectCategory)=>{
     return async(dispatch)=>{
         try
         {
-      
+            console.log(roleId,title,accessList,selectCategory)
             const token = localStorage.getItem("token")
             const newUrl = `${EDIT_ROLE}/${roleId}`
             const body = {
                 title : title,
-                roleAccessList:accessList
+                roleAccessList:accessList,
+                selectedCategories : selectCategory
             }
-        
+        console.log(body)
             const response = await apiConnector("PUT",newUrl,body,{
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization" : `Bearer ${token}`
             })
 
             console.log(response)
-            if(response.data.success)
-            {
+            // if(response.data.success)
+            // {
                 
-            }
+            // }
         } catch(err){
             console.log(err)
         }

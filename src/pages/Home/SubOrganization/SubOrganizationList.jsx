@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getOrganizations, getSubOrganizations, getSubOrganizationsByOrganizations, getUnassignedSubOrganizations } from '../../../services/operations/AsideBar'
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
-import { deleteSubOrganization } from '../../../services/operations/SubOrganization';
+import { assignOrganizationToSubOrganization, deleteSubOrganization, removeOrganizationFromSubOrganization } from '../../../services/operations/SubOrganization';
 import { useNavigate } from 'react-router-dom';
+import Modal from '../../../components/common/Modal';
 const SubOrganizationList = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -12,8 +13,13 @@ const SubOrganizationList = () => {
     const organizationData = useSelector((state)=>state.Aside.organizations)
     
     const [organizationId,setOrganizationId]= useState("unAssigned")
+    const [branchId,setBranchId]= useState('undefined')
+    const [modal,setModal] = useState(false)
+    const isLastPage = useSelector((state)=>state.Aside.isLastSubOrg)
+const [page,setPage] = useState(1)
+
     useEffect(()=>{
-        dispatch(getOrganizations())
+        dispatch(getOrganizations("All"))
         dispatch(getUnassignedSubOrganizations())
         // dispatch(getSubOrganizationsByOrganizations(organizationId))
     //    dispatch(getSubOrganizations())
@@ -32,9 +38,17 @@ function editHandler(data){
     navigate("/home/Create-Sub-Organization",{state : {preFilled : data }})
           }
     
+function assignOrganization(branchId,organizationId){
+ 
+  dispatch(assignOrganizationToSubOrganization(branchId,organizationId))
+}
+function unAssignOrganization(branchId,organizationId){
+  dispatch(removeOrganizationFromSubOrganization(branchId,organizationId))
+}
+console.log(isLastPage)
   return (
     <div className='p-5'>
-
+      
         <div>
             <select onChange={(e)=>{
                 e.preventDefault()
@@ -76,7 +90,15 @@ function editHandler(data){
           <td className='p-5'>{item._id}</td>
        
           <td>{item.name}</td>
-          <td>{item.organization ? item.organization :<button className='bg-yellow-300 p-2'>Assign</button>}</td>
+          <td>{item.Organization ? <button onClick={()=>{
+            console.log(item._id,item.Organization)
+            unAssignOrganization(item._id,item.Organization)
+          }} className='bg-yellow-300 p-2'>UnAssign</button> :<button onClick={(e)=>{
+
+            e.preventDefault()
+setBranchId(item._id)
+setModal(true)
+          }} className='bg-yellow-300 p-2'>Assign</button>}</td>
           <td >
           <div className='flex items-center gap-3'>
           <FiEdit 
@@ -92,6 +114,50 @@ function editHandler(data){
   </tbody>
         </table>
      </div>
+
+     {
+        modal && <Modal 
+        parent = {"subOrganization"}
+        setModal={setModal}
+        organizationId={organizationId}
+        branchId={branchId}
+        assignOrganization={assignOrganization}
+        // unAssignOrganization={unAssignOrganization}
+        setOrganizationId={setOrganizationId}
+        />
+      }
+
+<div className='flex justify-between'>
+
+<button
+onClick={(e)=>{
+ e.preventDefault()
+
+ 
+page >0  && (organizationId!=="unAssigned" ?dispatch(getSubOrganizationsByOrganizations(organizationId,page-1)) : dispatch(getUnassignedSubOrganizations(page-1)) )
+setPage(page-1)
+
+ console.log("HHHH")
+}} 
+disabled={page==1}
+
+
+className={`bg-red-400 p-3 rounded-md ${page==1  ? "opacity-60" : ""}`}>Previous</button>
+
+
+<button onClick={(e)=>{
+ e.preventDefault()
+
+ 
+page >0 && !isLastPage && (organizationId!=="unAssigned" ? dispatch(getSubOrganizationsByOrganizations(organizationId,page+1)) : dispatch(getUnassignedSubOrganizations(page+1)))
+setPage(page+1)
+
+ console.log("HHHH",isLastPage)
+}} 
+disabled={isLastPage}
+//  Complete This logic if on last page data.length=limit
+className={`bg-red-400 p-3 rounded-md ${isLastPage ? "opacity-60" : ""}`}>Next</button>
+</div>
     </div>
   )
 }

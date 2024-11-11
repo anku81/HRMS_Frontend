@@ -1,4 +1,4 @@
-import { setDepartments, setFilteredDepartments } from "../../redux/slices/asideSlice";
+import { setDepartments, setFilteredDepartments, setIsLastDep } from "../../redux/slices/asideSlice";
 import { apiConnector } from "../apiConnector";
 import { DepartmentEndPoints } from "../apis";
 
@@ -29,11 +29,11 @@ export const getAllDepartments = (page=1,limit=10)=>{
     }
 }
 
-export const getUnassignedDepartments = (page=1,limit=10)=>{
+export const getUnassignedDepartments = (page)=>{
     return async(dispatch)=>{
         try{
             const token = localStorage.getItem("token")
-            const newUrl = `${UNASSIGNED_DEPARTMENTS}/?page=${page}&limit=${limit}`
+            const newUrl = `${UNASSIGNED_DEPARTMENTS}/?page=${page ?? 1}&limit=${10}`
             const response = await apiConnector("GET",newUrl,{},{
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization" : `Bearer ${token}`
@@ -42,6 +42,7 @@ export const getUnassignedDepartments = (page=1,limit=10)=>{
             console.log(response)
             if(response.data.success)
             {
+                response?.data?.isLast ? dispatch(setIsLastDep(true)) : dispatch(setIsLastDep(false))
                 dispatch(setFilteredDepartments(response.data.data))
             }
         }catch(err){
@@ -50,11 +51,11 @@ export const getUnassignedDepartments = (page=1,limit=10)=>{
     }
 }
 
-export const getDepartmentsByOrganization= (organizationId,page=1,limit=10)=>{
+export const getDepartmentsByOrganization= (organizationId,page)=>{
     return async(dispatch)=>{
         try{
             const token = localStorage.getItem("token")
-            const newUrl = `${DEPARTMENTBYORGANIZATION}/${organizationId}/?page=${page}&limit=${limit}`
+            const newUrl = `${DEPARTMENTBYORGANIZATION}/${organizationId}/?page=${page ?? 1}&limit=${10}`
             const response = await apiConnector("GET",newUrl,{},{
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization" : `Bearer ${token}`
@@ -63,6 +64,7 @@ export const getDepartmentsByOrganization= (organizationId,page=1,limit=10)=>{
             console.log(response)
             if(response.data.success)
             {
+                response?.data?.isLast ? dispatch(setIsLastDep(true)) : dispatch(setIsLastDep(false))
                 dispatch(setFilteredDepartments(response.data.data))
             }
         }catch(err){
@@ -100,7 +102,7 @@ export const addDepartment = (name,description,customAttributes,organizationId,m
     }
 }
 
-export const editDepartment = (name,description,customAttributes,managerId,departmentId)=>{
+export const editDepartment = (name,description,customAttributes,organizationId,managerId,departmentId)=>{
       
     return async(dispatch)=>{
         try{
@@ -112,6 +114,7 @@ export const editDepartment = (name,description,customAttributes,managerId,depar
                 description:description,
                 customAttributes : customAttributes
             }
+            console.log(body,newUrl)
             const response = await apiConnector("PUT",newUrl,body,{
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization" : `Bearer ${token}`
@@ -161,7 +164,9 @@ export const assignBranchToDepartment = (departmentId,branchId)=>{
             console.log(departmentId)
             const newUrl = `${ASSIGN_BRANCH_TO_DEPARTMENT}/${departmentId}/${branchId}`
             const token = localStorage.getItem("token")
-          
+
+          console.log(newUrl)
+
             const response = await apiConnector("PATCH",newUrl,{},{
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization" : `Bearer ${token}`
@@ -170,7 +175,7 @@ export const assignBranchToDepartment = (departmentId,branchId)=>{
             console.log(response)
             // if(response.data.success)
             // {
-               
+           
             // }
 
         } catch (err){
@@ -186,7 +191,7 @@ export const assignOrganizationToDepartment = (departmentId,organizationId)=>{
             console.log(departmentId)
             const newUrl = `${ASSIGN_ORGANIZATION_TO_DEPARTMENT}/${departmentId}/${organizationId}`
             const token = localStorage.getItem("token")
-          
+          console.log(newUrl)
             const response = await apiConnector("PATCH",newUrl,{},{
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization" : `Bearer ${token}`
@@ -236,7 +241,7 @@ export const removeOrganizationFromDepartment = (departmentId,organizationId)=>{
             console.log(departmentId)
             const newUrl = `${REMOVE_ORGANIZATION_FROM_DEPARTMENT}/${departmentId}/${organizationId}`
             const token = localStorage.getItem("token")
-          
+          console.log(newUrl)
             const response = await apiConnector("PATCH",newUrl,{},{
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization" : `Bearer ${token}`

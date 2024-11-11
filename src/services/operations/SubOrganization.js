@@ -46,16 +46,16 @@ export const deleteSubOrganization = (organizationId,subOrganizationId)=>{
   }
 }
 
-export const editSubOrganization = (name,customAttributes,organizationId,)=>{
+export const editSubOrganization = (name,customAttributes,branchId)=>{
     return async()=>{
         try{
-            console.log(name,customAttributes,organizationId)
+            console.log(name,customAttributes,branchId)
     
-            const newUrl = `${EDIT_SUB_ORGANIZATION}/${organizationId}`
+            const newUrl = `${EDIT_SUB_ORGANIZATION}/${branchId}`
             console.log(newUrl)
             const token = localStorage.getItem("token")
     
-            const response = await apiConnector("POST",newUrl,{
+            const response = await apiConnector("PUT",newUrl,{
                 name:name,
                 customAttributes:customAttributes
             },{
@@ -75,10 +75,10 @@ export const assignOrganizationToSubOrganization = (branchId,organizationId)=>{
       
     return async(dispatch)=>{
         try{
-            console.log(departmentId)
+        
             const newUrl = `${ASSIGN_ORGANIZATION_TO_SUBORGANIZATION}/${branchId}/${organizationId}`
             const token = localStorage.getItem("token")
-          
+            console.log(branchId,organizationId,newUrl)
             const response = await apiConnector("PATCH",newUrl,{},{
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization" : `Bearer ${token}`
@@ -100,10 +100,10 @@ export const removeOrganizationFromSubOrganization = (branchId,organizationId)=>
       
     return async(dispatch)=>{
         try{
-            console.log(departmentId)
+           
             const newUrl = `${REMOVE_ORGANIZATION_FROM_SUBORGANIZATION}/${branchId}/${organizationId}`
             const token = localStorage.getItem("token")
-          
+          console.log(newUrl)
             const response = await apiConnector("PATCH",newUrl,{},{
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization" : `Bearer ${token}`

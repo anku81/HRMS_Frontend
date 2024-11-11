@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { apiConnector } from "../apiConnector";
 import { AsideBarEndPoints } from "../apis";
-import { setFilteredSubOrganizations, setOrganizations, setSubOrganizations } from "../../redux/slices/asideSlice";
+import { setFilteredSubOrganizations, setIsLastOrg, setIsLastSubOrg, setOrganizations, setSubOrganizations } from "../../redux/slices/asideSlice";
 
 
 const {ASIDE,ORGANIZATIONLIST,SUBORGANIZATIONLIST,
@@ -40,12 +40,12 @@ export const getAsideTabs = (navigate)=>{
     }
 }
 
-export const getOrganizations = (page=1,limit=10)=>{
+export const getOrganizations = (page)=>{
 
     return async(dispatch)=>{
         try{
             const token = localStorage.getItem("token")
-            const newUrl = `${ORGANIZATIONLIST}/?page=${page ?? 1}&limit=${limit ?? 10}`
+            const newUrl = `${ORGANIZATIONLIST}/?page=${page ?? 1}&limit=${10}`
             console.log(newUrl,token)
     
             const response = await apiConnector("GET",newUrl,{},{
@@ -53,9 +53,13 @@ export const getOrganizations = (page=1,limit=10)=>{
                 "Authorization" : `Bearer ${token}`
             })
             console.log("+++++++++++Here",response)
+
             if(response.data.success)
             {
-                dispatch(setOrganizations(response.data.data))
+               response.data?.isLast ? dispatch(setIsLastOrg(true)) : dispatch(setIsLastOrg(false))
+
+                response.data.data && dispatch(setOrganizations(response.data.data))
+               
               
             }
     
@@ -96,14 +100,14 @@ export const getSubOrganizations = (page=1,limit=10)=>{
    
 }
 
-export const getSubOrganizationsByOrganizations = (organizationId,page=1,limit=10)=>{
+export const getSubOrganizationsByOrganizations = (organizationId,page=1)=>{
 
     return async(dispatch)=>{
         try{
             
             
             const token = localStorage.getItem("token")
-            const newUrl = `${SUBORGANIZATIONSBYORGANIZATIONS}/${organizationId}/?page=${page}&limit=${limit}`
+            const newUrl = `${SUBORGANIZATIONSBYORGANIZATIONS}/${organizationId}/?page=${page}&limit=${10}`
             console.log(newUrl,token)
     
             const response = await apiConnector("GET",newUrl,{},{
@@ -113,6 +117,7 @@ export const getSubOrganizationsByOrganizations = (organizationId,page=1,limit=1
             console.log("+++++++++++SubOrg",response)
             if(response.data.success)
             {
+                response.data?.isLast ? dispatch(setIsLastSubOrg(true)) : dispatch(setIsLastSubOrg(false))
                 dispatch(setFilteredSubOrganizations(response.data.data))
                 
             }
@@ -126,10 +131,10 @@ export const getSubOrganizationsByOrganizations = (organizationId,page=1,limit=1
    
 }
 
-export const getUnassignedSubOrganizations =(page=1,limit=10)=>{
+export const getUnassignedSubOrganizations =(page)=>{
     return async(dispatch)=>{
         try{
-            const newUrl = `${UNASSIGNEDSUBORGANIZATIONS}/?page=${page}&limit=${limit}`
+            const newUrl = `${UNASSIGNEDSUBORGANIZATIONS}/?page=${page ?? 1}&limit=${10}`
             console.log("UNASSISBHSBBK",newUrl)
             const token = localStorage.getItem("token")
             const response = await apiConnector("GET",newUrl,{},{
@@ -140,6 +145,8 @@ export const getUnassignedSubOrganizations =(page=1,limit=10)=>{
             console.log(response)
             if(response.data.success)
             {
+                response.data?.isLast ? dispatch(setIsLastSubOrg(true)) : dispatch(setIsLastSubOrg(false))
+
                 dispatch(setFilteredSubOrganizations(response.data.data))
             }
         } catch (err){

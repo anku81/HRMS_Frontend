@@ -8,9 +8,14 @@ import { getAttributes } from '../../../services/operations/Attribute'
 import { getOrganizations } from '../../../services/operations/AsideBar'
 import CreateForm from '../../../components/Forms/CreateForm'
 import { getAllDepartments } from '../../../services/operations/Department'
+import { useLocation } from 'react-router-dom'
 
 const CreateEmployee = () => {
-  const [formState,setFormState] = useState(1)
+  const location = useLocation()
+  const preFilled = location.state?.preFilled
+  console.log(preFilled)
+  const [formState,setFormState] = preFilled ? useState(2) : useState(1)
+  const [userId,setUserId] = useState("")
   const dispatch = useDispatch()
 
   const parent = location.pathname.split("/").at(-1).replace("-"," ").split(" ")[1].replace("-","")
@@ -24,7 +29,8 @@ const CreateEmployee = () => {
   const customAttributes = useSelector((state)=>state.Attribute.employee)
   // console.log(customAttributes)
   const OrganizationData = useSelector((state)=>state.Aside.organizations)
-  console.log("CUSTOMMMM____+++++++_____+++++++",customAttributes)
+  // console.log("CUSTOMMMM____+++++++_____+++++++",customAttributes)
+  console.log("UUSSEERR  IIDD",userId)
   return(
     <>
       <div className='flex flex-col gap-10 items-center justify-center'>
@@ -32,15 +38,24 @@ const CreateEmployee = () => {
    formState={formState}
    />
   
-{    formState==1 && <CreateEmployeeForm/>}
+{    formState==1 && <CreateEmployeeForm
+    setUserId={setUserId}
+    setFormState={setFormState}
+/>}
 
 {formState==2 &&   <CreateForm 
+
+// preFilled = {preFilled}
+    userId={userId}
+    setFormState={setFormState}
     customAttributes={customAttributes}
     parent={parent}
     
   />}
 
-{formState==3 &&  <AdditionalDetailsForm/>}
+{formState==3 &&  <AdditionalDetailsForm
+ userId={userId}
+/>}
 
   </div>
   

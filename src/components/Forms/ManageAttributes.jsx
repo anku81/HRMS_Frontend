@@ -2,8 +2,11 @@ import React from 'react'
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { addAttribute } from '../../services/operations/Attribute';
+import { useLocation } from 'react-router-dom';
 const ManageAttributes = ({parent}) => {
     const dispatch= useDispatch()
+  
+
     const {
         register,
         handleSubmit,

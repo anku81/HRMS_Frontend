@@ -33,8 +33,13 @@ const CreateRole = () => {
   ];
   const [currTab, setCurrTab] = useState("EMPLOYEE");
   const [selectAll, setSelectAll] = useState(false);
-  const [selectCategory, setSelectCategory] = useState([]);
+  const [selectCategory, setSelectCategory] = preFilled ? useState(preFilled?.selectedCategories) : useState([]); 
   const accessList = useSelector((state) => state.Aside.accessList);
+
+  // useEffect(()=>{
+  //   console.log(preFilled,preFilled?.selectedCategories)
+  //   preFilled && setSelectCategory(preFilled?.selectedCategories)
+  // })
 console.log("selectCategory",selectCategory)
 const [checks, setChecks] = useState({})
  useEffect(()=>{
@@ -99,11 +104,11 @@ const [checks, setChecks] = useState({})
     for (let key in checks) {
       checks[key] && accessList.push(key);
     }
-    console.log(roleName,accessList);
-
+    console.log(roleName,accessList,selectCategory);
+    
     preFilled 
-    ? dispatch(editRole(preFilled?._id,roleName,accessList))
-    : dispatch(addRole(roleName,accessList))
+    ? dispatch(editRole(preFilled?._id,roleName,accessList,selectCategory))
+    : dispatch(addRole(roleName,accessList,selectCategory))
   }
 
   function tabHandler(e, item) {

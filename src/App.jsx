@@ -15,6 +15,7 @@ import CreateEmployee from './pages/Home/Employee/CreateEmployee'
 import EmployeeList from './pages/Home/Employee/EmployeeList'
 import CreateDepartment from './pages/Home/Department/CreateDepartment'
 import DepartmentList from './pages/Home/Department/DepartmentList'
+import ConfigureShift from './pages/Home/Attendence/ConfigureShift'
 
 
 function App() {
@@ -41,6 +42,8 @@ function App() {
 
     <Route path='/home/Create-Employee' element={<CreateEmployee/>}></Route>
     <Route path='/home/Employee-List' element={<EmployeeList/>}></Route>
+
+    <Route path='/home/Configure-Shift-Timings' element={<ConfigureShift/>}></Route>
     
     </Route>
     

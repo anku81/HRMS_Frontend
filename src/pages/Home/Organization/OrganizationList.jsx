@@ -11,7 +11,9 @@ const OrganizationList = () => {
 const dispatch = useDispatch()
 const navigate = useNavigate()
 const data = useSelector((state)=>state.Aside.organizations)
-
+const isLastPage = useSelector((state)=>state.Aside.isLastOrg)
+const [page,setPage] = useState(1)
+// const [limit,setLimit] = useState(2)
   useEffect(()=>{
    
    dispatch(getOrganizations())
@@ -66,6 +68,37 @@ const data = useSelector((state)=>state.Aside.organizations)
       </tbody>
       </table>
      </div>
+   <div className='flex justify-between'>
+
+   <button
+   onClick={(e)=>{
+    e.preventDefault()
+  
+    
+  page >0  && dispatch(getOrganizations(page-1))
+   setPage(page-1)
+
+    console.log("HHHH")
+   }} 
+   disabled={page==1}
+
+
+   className={`bg-red-400 p-3 rounded-md ${page==1  ? "opacity-60" : ""}`}>Previous</button>
+
+
+   <button onClick={(e)=>{
+    e.preventDefault()
+  
+    
+  page >0  && !isLastPage && dispatch(getOrganizations(page+1)) 
+  setPage(page+1)
+
+    console.log("HHHH",isLastPage)
+   }} 
+   disabled={ isLastPage}
+  //  Complete This logic if on last page data.length=limit
+   className={`bg-red-400 p-3 rounded-md ${ isLastPage ? "opacity-60" : ""}`}>Next</button>
+   </div>
     </div>
   )
 }

@@ -74,3 +74,13 @@ export const Employee_EndPoints = {
 export const Access_EndPoints = {
     GET_FULL_ACCESS_LIST : BaseUrl + "/api/v1/fullAccessList"
 }
+
+export const Attendence_EndPoints = {
+    GET_ATTENDENCE : BaseUrl + "/api/v1/getAttendenceData",
+    ADD_LOCATION : BaseUrl + "/api/v1/addLocation",
+    UPDATE_LOCATION : BaseUrl + "/api/v1/editLoaction",
+    DELETE_LOCATION : BaseUrl + "/api/v1/deleteLocation",
+    ADD_TIMING : BaseUrl + "/api/v1/addTiming",
+    UPDATE_TIMING : BaseUrl + "/api/v1/editTiming",
+    DELETE_TIMING : BaseUrl + "/api/v1/deleteTiming",
+}
