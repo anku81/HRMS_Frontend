@@ -3,12 +3,14 @@ import authReducer from "./slices/authSlice";
 import userReducer from "./slices/userSlice";
 import asideReducer from "./slices/asideSlice";
 import attributeReducer from "./slices/attributeSlice";
+import themeReducer from "./slices/themeSlice";
 
 export const store = configureStore({
 reducer :{
     Auth : authReducer,
     User : userReducer,
     Aside : asideReducer,
-    Attribute : attributeReducer
+    Attribute : attributeReducer,
+    Theme : themeReducer
 }
 })

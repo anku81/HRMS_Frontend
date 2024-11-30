@@ -84,3 +84,11 @@ export const Attendence_EndPoints = {
     UPDATE_TIMING : BaseUrl + "/api/v1/editTiming",
     DELETE_TIMING : BaseUrl + "/api/v1/deleteTiming",
 }
+
+export const skill_EndPoints = {
+    
+    GET_ALL_SKILLS : BaseUrl +"/api/v1/getAllSkills", 
+    ADD_SKILLS : BaseUrl + "/api/v1/addSkill",
+    UPDATE_SKILL : BaseUrl + "/api/v1/editSkill",
+    DELETE_SKILL : BaseUrl + "/api/v1/deleteSkill"
+}

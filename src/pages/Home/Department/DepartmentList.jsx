@@ -7,8 +7,9 @@ import { MdDelete } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import { getEmployeeById } from '../../../services/operations/Employee';
 import Modal from '../../../components/common/Modal';
-
+import { IoAddCircleOutline } from "react-icons/io5";
 const DepartmentList = () => {
+  const Theme = useSelector((state)=>state.Theme.theme)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const data = useSelector((state)=>state.Aside.filteredDepartments)
@@ -65,10 +66,20 @@ const [page,setPage] = useState(1)
 
 
 return (
-  <div className='p-5 '>
+  <div className={`p-5 rounded ${Theme=="Dark" ? "bg-slate-800 text-white" : "bg-slate-100"}`}>
+    <div className='flex justify-between text-xl font-bold w-full'>
+           <p>{location.pathname.split("/").at(-1).replaceAll("-"," ")}</p>
+           <p>Home / <span className='text-yellow-600'>{location.pathname.split("/").at(-1).replaceAll("-"," ")}</span></p>
+           </div>
 
+      <button 
+      onClick={()=>navigate("/home/Create-Department")}
+      className="p-2 bg-red-500 mt-7 rounded text-white flex items-center gap-3"><IoAddCircleOutline/>Add Department</button>
       <div >
-          <select onChange={(e)=>{
+          <select
+          
+          className={`appearance-none  min-w-72 max-w-72 w-72 p-2 drop-shadow-lg border-2 rounded mb-3 mx-auto mt-9 ${Theme=="Dark" ? "bg-slate-800 border-slate-500" : "bg-slate-100"}`}
+          onChange={(e)=>{
               e.preventDefault()
               setOrganizationId(e.target.value)
               if(e.target.value=="unAssigned")
@@ -91,10 +102,10 @@ return (
 
 
 
-   <div className='border rounded-lg overflow-hidden'>
+   <div className='border rounded-lg overflow-hidden mt-9 mb-7'>
    <table className='w-full'>
       <thead className='w-full text-left '>
-     <tr className='bg-slate-400'>
+     <tr className={`${Theme=="Dark" ? "bg-slate-600 text-white" : "bg-slate-400"}`}>
      <th className='p-3'>Department Name</th>
       <th>Department Manager</th>
       <th>Department Description</th>
@@ -105,11 +116,11 @@ return (
     </thead>
 <tbody>
 {
-      data && data.map((item,index)=>(<tr className={`h-full ${index%2==0 ? "bg-zinc-200" : ""}`}>
+      data && data.map((item,index)=>(<tr className={`h-full ${index%2==0 ? Theme=="Dark" ? "bg-zinc-500 text-white" : "bg-zinc-200" : ""}`}>
 
         <td className='p-5'>{item.name}</td>
      
-        <td>{item.manager}</td>
+        <td>{item?.manager?.personalDetails?.firstName + " " + item?.manager?.personalDetails?.lastName}</td>
         <td>{item.description}</td>
         <td>{item.Organization ? <button onClick={(e)=>{
           e.preventDefault()
@@ -135,9 +146,11 @@ return (
         <td >
         <div className='flex items-center gap-3'>
         <FiEdit 
+        className='text-blue-500 '
         onClick={()=>editHandler(item)}
         />
         <MdDelete
+        className=' text-red-500'
         onClick={()=>deleteHandler(item._id)}
         />
         </div>

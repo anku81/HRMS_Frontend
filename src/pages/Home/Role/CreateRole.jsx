@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { addRole, editRole } from "../../../services/operations/Roles";
 import { AiOutlineCheck } from "react-icons/ai";
+import SubmitButton from "../../../components/common/SubmitButton";
 const CreateRole = () => {
+  const Theme = useSelector((state)=>state.Theme.theme)
   const location = useLocation();
   const preFilled = location?.state?.preFilled;
   const dispatch = useDispatch();
@@ -147,28 +149,29 @@ console.log(preFilled)
   
   // console.log(checks,currTab)
   return (
-    <div>
-      {tabs &&
-        tabs.map((item) => (
-          <button
-            onClick={(e) => {
-              tabHandler(e, item);
-            }}
-            className={` p-2 m-2 rounded  ${
-              currTab == item.toUpperCase().split(" ")[0]
-                ? "bg-blue-400"
-                : "bg-slate-300"
-            }`}
-          >
-            {item}
-          </button>
-        ))}
+    <div className={` p-2 rounded-lg ${Theme=="Dark" ? "bg-slate-800" : "bg-slate-100"}`}>
+
+
+           <div className='flex justify-between font-bold w-full p-5 text-xl'>
+           <p>{location.pathname.split("/").at(-1).replaceAll("-"," ")}</p>
+           <p>Home / <span className='text-yellow-600'>{location.pathname.split("/").at(-1).replaceAll("-"," ")}</span></p>
+           </div>
+
+      <div className="ml-11 mb-3">
+ 
+      <p className="font-bold my-3">Workflow to create a role</p>
+      <p>1. Fill out the role name</p>
+      <p>2. Select the appropriate tab to view the priveleges related to a specific group (e.g. :- Department,Employee etc)</p>
+      <p>3. Check the boxes for priveleges you want to assign to the role</p>
+      </div>
+
+    
 
       <form onSubmit={handleSubmit((data) => submissionHandler(data.roleName))}>
-        <label className="flex flex-col m-3">
-          <sup>Role Name *</sup>
+        <label className="flex flex-col m-3 mt-8 ">
+          <sup className="font-bold text-sm">Role Name *</sup>
           <input
-            className="border m-2 p-2 shadow-md rounded"
+            className={`border m-2 p-2 shadow-md rounded my-4 ${Theme=="Dark" ? "bg-slate-800 border-slate-400" : ""}`}
             defaultValue={preFilled?.title}
             placeholder="Enter Role name "
             {...register("roleName", { required: true })}
@@ -176,7 +179,7 @@ console.log(preFilled)
           {errors.roleName && <p>Role Name is required.</p>}
         </label>
 
-        <label className="flex">
+        <label className="flex text-orange-500">
           <input
             onClick={(e) => {
               e.preventDefault();
@@ -188,29 +191,49 @@ console.log(preFilled)
                 clearTimeout(timerId);
               };
             }}
-            className={`w-4 h-4 appearance-none mr-2 border-2 border-gray-300 rounded  checked:border-blue-500 checked:bg-blue-500 `}
+            className={`w-4 h-4 translate-y-1 appearance-none mr-2 border-2 ${Theme=="Dark" ? "border-white" : "border-gray-300"}  rounded  checked:border-blue-500 checked:bg-blue-500 `}
             checked={selectAll}
             type="checkbox"
           />
           <AiOutlineCheck
             className={`${
               selectAll ? "scale-70" : "scale-0"
-            } translate-x-[-1.49rem]  transition-transform duration-200 ease-out text-white`}
+            } translate-x-[-1.49rem] translate-y-1 transition-transform duration-200 ease-out text-white`}
           />
           Select All Privileges
         </label>
 
-        <label className="flex">
+        <div className="my-5">
+        {tabs &&
+        tabs.map((item) => (
+          <button
+            onClick={(e) => {
+              tabHandler(e, item);
+            }}
+            className={` p-2 m-2 rounded  ${
+              currTab == item.toUpperCase().split(" ")[0]
+                ? `${Theme=="Dark" ? "bg-blue-600": "bg-blue-400"}`
+                : Theme=="Dark" ? "bg-slate-600": "bg-slate-300"
+            }`}
+          >
+            {item}
+          </button>
+        ))}
+        </div>
+
+        
+
+        <label className="flex text-orange-400 mb-4">
           <input
             onClick={(e) => toggleCategory(e)}
-            className={`w-4 h-4 appearance-none mr-2 border-2 border-gray-300 rounded  checked:border-blue-500 checked:bg-blue-500 `}
+            className={`w-4 h-4 translate-y-1 appearance-none mr-2 border-2  ${Theme=="Dark" ? "border-white" : "border-gray-300"} rounded  checked:border-blue-500 checked:bg-blue-500 `}
             checked={selectCategory.includes(currTab) ? true :  false}
             type="checkbox"
           />
           <AiOutlineCheck
             className={`${
               selectCategory.includes(currTab) ? "scale-70" : "scale-0"
-            } translate-x-[-1.49rem]  transition-transform duration-200 ease-out text-white`}
+            } translate-x-[-1.49rem] translate-y-1 transition-transform duration-200 ease-out text-white`}
           />
           Select {currTab && currTab.toLowerCase()} Privileges
         </label>
@@ -230,7 +253,7 @@ console.log(preFilled)
                 <label className="flex items-center ml-2 mb-1">
                   <input
                     type="checkbox"
-                    className={`w-4 h-4 appearance-none mr-2 border-2 border-gray-300 rounded ${checks[item] || selectCategory.includes(currTab) ? "border-blue-500 bg-blue-500" : ""}`}
+                    className={`w-4 h-4 appearance-none mr-2 border-2  ${Theme=="Dark" ? "border-white" : "border-gray-300"} rounded ${checks[item] || selectCategory.includes(currTab) ? "border-blue-500 bg-blue-500" : ""}`}
                     onClick={(e) => checkHandler(e)}
                 
                     // checked={checks[item] || selectCategory.includes(currTab) ? true :  false}
@@ -254,8 +277,12 @@ console.log(preFilled)
                 </label>
               </div>
             ))}
-
-        <input type="submit" />
+        <div className="flex justify-center mt-9 mb-3">
+          <SubmitButton
+          buttonText={"Submit"}
+          />
+        </div>
+        
       </form>
     </div>
   );

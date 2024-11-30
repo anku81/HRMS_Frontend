@@ -16,10 +16,16 @@ import EmployeeList from './pages/Home/Employee/EmployeeList'
 import CreateDepartment from './pages/Home/Department/CreateDepartment'
 import DepartmentList from './pages/Home/Department/DepartmentList'
 import ConfigureShift from './pages/Home/Attendence/ConfigureShift'
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { setTheme } from './redux/slices/themeSlice'
 
 
 function App() {
- 
+ const dispatch = useDispatch()
+ useEffect(()=>{
+dispatch(setTheme("Dark"))
+ },[])
 
   return (
    <>

@@ -7,6 +7,7 @@ import { assignDepartmentToEmployee, deleteEmployee, getAllEmployees, getEmploye
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../../components/common/Modal';
 const EmployeeList = () => {
+  const Theme = useSelector((state)=>state.Theme.theme)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const data = useSelector((state)=>state.Aside.filteredEmployees)
@@ -41,10 +42,20 @@ dispatch(deleteEmployee(userId))
     dispatch(assignDepartmentToEmployee(userId,departmentId))
   }
 return (
-  <div className='p-5'>
+  <div className={`p-5 bg-slate-100 rounded ${Theme=="Dark" ? "bg-slate-800 text-white" : "bg-slate-100"}`}>
+ <div className='flex justify-between font-bold w-full'>
+           <p>{location.pathname.split("/").at(-1).replaceAll("-"," ")}</p>
+           <p>Home/<span className='text-yellow-600'>{location.pathname.split("/").at(-1).replaceAll("-"," ")}</span></p>
+           </div>
 
+      <button 
+      onClick={()=>navigate("/home/Create-Employee")}
+      className="p-2 bg-red-500 mt-7 rounded text-white ">Add Employee</button>
       <div>
-          <select onChange={(e)=>{
+          <select 
+                        className={`appearance-none w-full min-w-72 max-w-96 p-2 drop-shadow-lg border-2 rounded mb-3 mx-auto mt-9 ${Theme=="Dark" ? "bg-slate-700 border-slate-500" : "bg-slate-100"} `}
+
+          onChange={(e)=>{
               e.preventDefault()
                setDepartmentId(e.target.value)
               console.log("Changed========>",e.target.value)
@@ -68,10 +79,10 @@ return (
 
 
 
-   <div className='border rounded-lg overflow-hidden'>
+   <div className='border rounded-lg overflow-hidden mt-9 mb-7'>
    <table className='w-full'>
       <thead className='w-full text-left '>
-     <tr className='bg-slate-400'>
+     <tr className={`${Theme=="Dark" ? "bg-slate-600 text-white" : "bg-slate-400"}`}>
      <th className='p-3'>Avatar</th>
       <th>Employee Name</th>
       <th>Employee Email</th>
@@ -82,7 +93,7 @@ return (
     </thead>
 <tbody>
 {
-      (data && data.length>0) && data.map((item,index)=>(<tr className={`h-full ${index%2==0 ? "bg-zinc-200" : ""}`}>
+      (data && data.length>0) && data.map((item,index)=>(<tr className={`h-full ${index%2==0 ? Theme=="Dark" ? "bg-zinc-500" : "bg-zinc-200" : ""}`}>
 
         {/* <td className='p-5'></td> */}
        <td> <img 
@@ -102,9 +113,11 @@ return (
         <td >
         <div className='flex items-center gap-3'>
         <FiEdit 
+        className='text-blue-500'
         onClick={()=>editHandler(item)}
         />
         <MdDelete
+        className='text-red-500'
         onClick={()=>deleteHandler(item._id)}
         />
         </div>

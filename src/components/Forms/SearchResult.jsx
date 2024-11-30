@@ -19,7 +19,7 @@ const SearchResult = ({setSearchTerm,setManagerId}) => {
     // ]
 // console.log(serachResult)
   return (
-    <div className=''>
+    <div className=' w-full'>
         {/* <ul> */}
       {
             serachResult && serachResult.map((item)=><input 
@@ -36,7 +36,7 @@ const SearchResult = ({setSearchTerm,setManagerId}) => {
                },1000)
             }}
             
-            className='max-w-72 w-full p-2 border   border-gray-400 ' value={item?.firstName +" "+ item?.lastName}></input>)
+            className='w-full p-2 border   border-gray-400 ' value={item?.firstName +" "+ item?.lastName}></input>)
 
             }
             {/* </ul> */}

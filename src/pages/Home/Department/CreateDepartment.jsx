@@ -4,6 +4,7 @@ import CreateForm from '../../../components/Forms/CreateForm'
 import { getAttributes } from '../../../services/operations/Attribute'
 
 const CreateDepartment = () => {
+  
   const dispatch = useDispatch()
   const parent = location.pathname.split("/").at(-1).replace("-"," ").split(" ")[1]
   console.log("Parent-=-=-=-=-=--=-=>>>>>>",parent)

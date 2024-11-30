@@ -1,33 +1,38 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
-import { addLocation, addTiming, getAttendenceData } from '../../../services/operations/Attendence';
+import { addLocation, addTiming, deleteLocation, deleteTiming, editLocation, editTiming, getAttendenceData } from '../../../services/operations/Attendence';
 
 const ConfigureShift = () => {
     const dispatch = useDispatch()
-
+    const button = useRef("Submit");
+    const locationButton = useRef("Add Location");
+    const locationId = useRef(null);
 
     const Hrs = [...Array(12)].map((item, index) => index + 1);
     const Min = [...Array(60)].map((item, index) => index + 1);
     const [time,setTime] = useState("")
-    const [location,setLocation] = useState(null)
+    const [location,setLocation] = useState("")
     const attendenceData = useSelector((state)=>state.Aside.attendenceData)
   useEffect(()=>{
  
 dispatch(getAttendenceData())
   },[])
+
+
 console.log(attendenceData)
   
 function getLocation(){
-
+    console.log(locationButton.current)
     if(window.navigator.geolocation )
     {
         window.navigator.geolocation.getCurrentPosition((position)=>{
             const { latitude, longitude } = position.coords;
         
             (latitude && longitude)  ?
-            dispatch(addLocation(location,latitude,longitude))
+            locationButton.current == "Add Location"?
+            dispatch(addLocation(location,latitude,longitude)) : dispatch(editLocation(attendenceData?._id,locationId.current,location,latitude,longitude))
             : alert("Failed to fetch location")
       
         })
@@ -37,19 +42,35 @@ function getLocation(){
         alert("Browser doesn't support geoloation")
     }
 }
+function editShiftTiming(data){
+    button.current = "Update"
 
-function addShiftTime(){
+    setTime(data?.hours + ":" +  data?.minutes)
+}
+function shiftTimeHandler(){
  
     const hours = time.split(":")[0]
     const minutes = time.split(":")[1]
     // console.log(time,hours,minutes)
+    button.current=="Update" ? dispatch(editTiming(attendenceData._id,hours,minutes)): 
     dispatch(addTiming(hours,minutes))
 }
+
+function editLocationHandler(data){
+   
+    locationId.current = data?._id
+    locationButton.current="Update Location"
+    setLocation(data?.name)
+    console.log(locationId.current,data,Number(data.latitude.$numberDecimal))
+    // const latitude =Number(data.latitude.$numberDecimal)
+    // const longitude =  Number(data.longitude.$numberDecimal)
+}
+
   return (
     <div className='flex  p-5 gap-3'>
   
-      <div className='border w-1/2 flex flex-col items-center'>
-      <div className='flex flex-col'>
+      <div className='border w-1/2 flex flex-col items-center text-center'>
+      <div className='flex flex-col gap-3'>
         <h1>Add Shift Details</h1>
 
        
@@ -87,56 +108,72 @@ function addShiftTime(){
  placeholder='HH:MM'
  />
         <button 
-        onClick={()=> addShiftTime()}
-        className='bg-blue-700 text-white p-2 rounded-md  w-16  mx-auto'>Submit</button>
+        onClick={()=>shiftTimeHandler()}
+        className='bg-blue-700 text-white p-2 rounded-md  mx-auto'>{button.current}</button>
       </div>
 
       <div>
         <p>Shift Timings</p>
 
-        <div className='flex gap-4'>
+      {  attendenceData?.timing?.hours && <div className='flex gap-4'>
         {attendenceData?.timing && <p>{attendenceData?.timing?.hours} : {attendenceData?.timing?.minutes} </p>}
         <div className='flex items-center gap-3'>
         <FiEdit 
         className='text-blue-400'
-        onClick={()=>editHandler(item)}
+        onClick={()=>editShiftTiming(attendenceData?.timing)}
         />
         <MdDelete
            className='text-red-500'
-        onClick={()=>deleteHandler(item._id)}
+        onClick={()=>dispatch(deleteTiming(attendenceData?._id))}
         />
         </div>
-        </div>
+        </div>}
       </div>
       </div>
 
 
-      <div className='border w-1/2'>
-      <div >
+      <div className='border w-1/2 flex flex-col items-center text-center'>
+      <div className='flex flex-col gap-3' >
         <h1>Add Attendence Location</h1>
         <p>Location Name</p>
         <input
-        className='border'
+        className='border p-2'
         value={location}
+        placeholder='Location Name'
         onChange={(e)=>setLocation(e.target.value)}
         />
         <button 
         onClick={()=>{
             getLocation()
         }}
-        className='bg-blue-700 text-white p-2 rounded-md'>Add Location</button>
+        className='bg-blue-700 text-white p-2 rounded-md   mx-auto'>{ locationButton.current}</button>
       </div>
 
       <div>
-        <p>Shift Timings</p>
-        <div className='flex items-center gap-3'>
-        <FiEdit 
-        onClick={()=>editHandler(item)}
-        />
-        <MdDelete
-        onClick={()=>deleteHandler(item._id)}
-        />
-        </div>
+        <p>Attendence Locations</p>
+        {
+            console.log(attendenceData?.locations)
+        }
+        {
+          attendenceData?.locations && attendenceData?.locations.map((item)=>{
+          
+                return <div className='flex justify-center gap-5'>
+
+<p>{item?.name}</p>
+                <div className='flex items-center gap-3'>
+                <FiEdit 
+                 className='text-blue-400'
+                onClick={()=>editLocationHandler(item)}
+                />
+                <MdDelete
+                 className='text-red-500'
+                onClick={()=>dispatch(deleteLocation(attendenceData?._id,item?._id))}
+                />
+                </div>
+                </div>
+            })
+        }
+       
       </div>
       </div>
     </div>

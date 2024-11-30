@@ -6,6 +6,8 @@ import { useForm,Controller } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const AdditionalDetailsForm = ({userId}) => {
+
+
   const navigate = useNavigate()
   const location = useLocation()
   const preFilled = location.state?.preFilled
@@ -36,11 +38,11 @@ const AdditionalDetailsForm = ({userId}) => {
   return (
 
     <div
-    
+    className='p-5 '
     >
 
       <EmergencyContact
-     
+  
       userId={userId}
       setEmergencyContact={setEmergencyContact}
       emergencyContact={emergencyContact}

@@ -5,11 +5,12 @@ import { MdDelete } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteOrganization } from '../../../services/operations/Organization';
 import { useNavigate } from 'react-router-dom';
-
+import { IoAddCircleOutline } from "react-icons/io5";
 const OrganizationList = () => {
 
 const dispatch = useDispatch()
 const navigate = useNavigate()
+const Theme = useSelector((state)=>state.Theme.theme)
 const data = useSelector((state)=>state.Aside.organizations)
 const isLastPage = useSelector((state)=>state.Aside.isLastOrg)
 const [page,setPage] = useState(1)
@@ -29,11 +30,19 @@ const [page,setPage] = useState(1)
   navigate("/home/Create-Organization",{state : {preFilled : data }})
       }
   return (
-    <div className='w-full p-5 border rounded-lg'>
-     <div className='border rounded-lg overflow-hidden'>
+    <div className={`w-full p-5 border rounded-lg ${Theme=="Dark" ? "bg-slate-800 text-white" : "bg-slate-100"}`}>
+       <div className='flex justify-between text-xl font-bold w-full'>
+           <p>{location.pathname.split("/").at(-1).replaceAll("-"," ")}</p>
+           <p>Home / <span className='text-yellow-600'>{location.pathname.split("/").at(-1).replaceAll("-"," ")}</span></p>
+           </div>
+
+      <button 
+      onClick={()=>navigate("/home/Create-Organization")}
+      className="p-2 bg-red-500 mt-7 rounded text-white flex items-center gap-2"><IoAddCircleOutline />Add Organization</button>
+     <div className='border rounded-lg overflow-hidden mt-10 mb-7'>
      <table className='w-full'>
       <thead className='w-full text-left '>
-       <tr className='bg-slate-400'>
+       <tr className={ `w-full p-5 border rounded-lg ${Theme=="Dark" ? "bg-slate-600 text-white" : "bg-slate-400"}`}>
        <th className='p-3'>S No.</th>
         <th>Organization Logo</th>
         <th>Organization Name</th>
@@ -43,7 +52,7 @@ const [page,setPage] = useState(1)
       </thead>
       <tbody>
       {
-        data && data.map((item,index)=>(<tr className={`h-full ${index%2==0 ? "bg-zinc-200" : ""}`}>
+        data && data.map((item,index)=>(<tr className={`h-full ${index%2==0 ?Theme=="Dark" ? "bg-zinc-500 text-white" : "bg-zinc-200"  : ""}`}>
 
           <td className='p-5'>{index+1}</td>
           <td >
@@ -56,9 +65,11 @@ const [page,setPage] = useState(1)
           <td >
           <div className='flex items-center gap-3'>
           <FiEdit 
+          className='text-blue-500 '
         onClick={()=>editHandler(item)}
         />
         <MdDelete
+        className=' text-red-500'
         onClick={()=>deleteHandler(item._id)}
         />
           </div>

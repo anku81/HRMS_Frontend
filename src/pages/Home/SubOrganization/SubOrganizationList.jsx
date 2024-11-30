@@ -9,6 +9,7 @@ import Modal from '../../../components/common/Modal';
 const SubOrganizationList = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const Theme = useSelector((state)=>state.Theme.theme)
     const data = useSelector((state)=>state.Aside.filteredSubOrganizations)
     const organizationData = useSelector((state)=>state.Aside.organizations)
     
@@ -47,10 +48,21 @@ function unAssignOrganization(branchId,organizationId){
 }
 console.log(isLastPage)
   return (
-    <div className='p-5'>
+    <div className={`p-5  rounded ${Theme=="Dark" ? "bg-slate-800 text-white" : "bg-slate-100"}`}>
+      <div className={`flex justify-between text-xl font-bold w-full `}>
+           <p>{location.pathname.split("/").at(-1).replaceAll("-"," ")}</p>
+           <p>Home / <span className='text-yellow-600'>{location.pathname.split("/").at(-1).replaceAll("-"," ")}</span></p>
+           </div>
+
+      <button 
+      onClick={()=>navigate("/home/Create-Sub-Organization")}
+      className="p-2 bg-red-500 mt-7 rounded text-white ">Add Sub Organization</button>
       
         <div>
-            <select onChange={(e)=>{
+            <select
+                      className={`appearance-none w-72 min-w-72 max-w-72 p-2 drop-shadow-lg border-2 rounded mb-3 mx-auto mt-9 ${Theme=="Dark" ? "bg-slate-700 border-slate-500" : "bg-slate-100"} `}
+
+            onChange={(e)=>{
                 e.preventDefault()
                 setOrganizationId(e.target.value)
                 if(e.target.value=="unAssigned")
@@ -73,10 +85,10 @@ console.log(isLastPage)
 
 
 
-     <div className='border rounded-lg overflow-hidden'>
+     <div className={`border rounded-lg overflow-hidden mt-9 mb-7 `}>
      <table className='w-full'>
         <thead className='w-full text-left '>
-       <tr className='bg-slate-400'>
+       <tr className={`${Theme=="Dark" ? "bg-slate-700 text-white" : "bg-slate-400"}`}>
        <th className='p-3'>Sub Organization Id</th>
         <th>Sub Organization Name</th>
         <th>Assign Organization</th>
@@ -85,7 +97,7 @@ console.log(isLastPage)
       </thead>
   <tbody>
   {
-        data && data.map((item,index)=>(<tr className={`h-full ${index%2==0 ? "bg-zinc-200" : ""}`}>
+        data && data.map((item,index)=>(<tr className={`h-full ${index%2==0 ? Theme=="Dark" ? "bg-zinc-500 text-white" : "bg-zinc-200" : ""}`}>
 
           <td className='p-5'>{item._id}</td>
        
@@ -102,9 +114,11 @@ setModal(true)
           <td >
           <div className='flex items-center gap-3'>
           <FiEdit 
+          className='text-blue-500 '
         onClick={()=>editHandler(item)}
         />
         <MdDelete
+        className=' text-red-500'
         onClick={()=>deleteHandler(item.organization,item._id)}
         />
           </div>

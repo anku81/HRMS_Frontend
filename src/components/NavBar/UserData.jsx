@@ -11,7 +11,8 @@ const UserData = () => {
     setUserData(()=>{
       return {
        name : user.name,
-       role : user.role
+       role : user.role,
+       profilePicture : user.profilePicture
       }
      })
   }
@@ -20,7 +21,7 @@ const UserData = () => {
         fetchData()
       
   },[user])
-  console.log(userData)
+  console.log(user)
   return (
     <>
     <div 
@@ -36,7 +37,7 @@ const UserData = () => {
           <img
           className='border h-10 w-10 rounded-full'
          
-           src='' alt='Happy'></img>
+           src={userData.profilePicture} alt='Happy'></img>
        
 
         <div className='flex flex-col justify-center p-4 text-black'>

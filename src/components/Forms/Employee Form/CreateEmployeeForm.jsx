@@ -6,8 +6,10 @@ import { useForm } from 'react-hook-form';
 import {getOrganizations} from '../../../services/operations/AsideBar'
 import {getAllRoles} from '../../../services/operations/Roles'
 import { addEmployee } from '../../../services/operations/Employee';
+import SubmitButton from '../../common/SubmitButton';
 
 const CreateEmployeeForm = ({setUserId,setFormState}) => {
+  const Theme = useSelector((state)=>state.Theme.theme)
     const dispatch = useDispatch()
     useEffect(()=>{
       dispatch(getAllRoles())
@@ -30,14 +32,20 @@ const submissionHandler = (email,password,organization,roleId)=>{
 }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit((data) =>submissionHandler(data.email,data.password,data.organizationId,data.roleId) )}>
+    <div className='  w-1/2 '>
+      <form 
+      className=' w-96  mx-auto'
+      onSubmit={handleSubmit((data) =>submissionHandler(data.email,data.password,data.organizationId,data.roleId) )}>
 
-      <div>
+      <div className='flex flex-col   max-w-96'>
           <label htmlFor="organizationId">Select a organization</label>
 
-          <select id="organizationId" {...register("organizationId", { required: true })}>
-          <option value="">--Select--</option>
+          <select id="organizationId"
+          // className='appearance-none'
+          className={` appearance-none w-full min-w-72 max-w-96 p-2 drop-shadow-lg border-2 rounded mb-3 mx-auto ${Theme=="Dark" ? "bg-slate-800 text-white" : "bg-slate-100"} `}
+
+          {...register("organizationId", { required: true })}>
+          <option value="">Select Organization</option>
           {
           OrganizationList && OrganizationList.map((item)=>  <option value={item._id}>{item.name}</option>)
           }
@@ -61,11 +69,14 @@ type={`password`}
        placeholder={`Enter Your Password`}
        {...register('password', { required: true })}
        />
-   <div>
+   <div className='flex flex-col   max-w-96'>
           <label htmlFor="roleId">Select a Role</label>
           
-          <select id="roleId" {...register("roleId", { required: true })}>
-          <option value="">--Select--</option>
+          <select
+                    className={`appearance-none w-full min-w-72 max-w-96 p-2 drop-shadow-lg border-2 rounded mb-3 mx-auto ${Theme=="Dark" ? "bg-slate-800 text-white" : "bg-slate-100"} `}
+
+          id="roleId" {...register("roleId", { required: true })}>
+          <option value="">Select a Role</option>
           {
           RoleList && RoleList.map((item)=>  <option value={item._id}>{item.title}</option>)
           }
@@ -75,7 +86,12 @@ type={`password`}
           </select>
           {errors.organizationId && <p>This field is required</p>}
       </div>
-          <button>Submit</button>
+      <div className='flex justify-center  my-5'>
+      <SubmitButton
+      buttonText={"Submit"}
+      />
+      </div>
+        
       </form>
     </div>
   )

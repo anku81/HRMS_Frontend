@@ -30,13 +30,16 @@ const EmergencyContact = ({setEmergencyContact,userId,emergencyContact}) => {
       })}
       className='flex flex-col gap-12'>
       <div className='flex gap-12'>
+
       <InputField
         label={`Contact`}
+        placeholder={`Contact`}
         defaultValue={preFilled?.additionalDetails?.emergencyContact?.contact}
         {...register('contact', { required: true })}
         />
         <InputField
         label={`Relationship`}
+        placeholder={`Relationship`}
         defaultValue={preFilled?.additionalDetails?.emergencyContact?.relationShip}
         {...register('relationShip', { required: true })}
         />

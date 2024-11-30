@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import InputField from '../../../common/InputField'
 import { useForm,Controller } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { editEmployeeAdditionalDetails } from '../../../../services/operations/Employee';
 import { useLocation } from 'react-router-dom';
 const BankDetails = ({setBankDetails,bankDetails,userId}) => {
+  const Theme = useSelector((state)=>state.Theme.theme)
     const dispatch = useDispatch()
     const location = useLocation()
     const preFilled = location.state?.preFilled
@@ -28,6 +29,8 @@ const bankData = preFilled?.additionalDetails?.bankDetails
         <div className='p-5'>
         <p className='text-center'>Bank Details</p>
       <form 
+        
+
       onSubmit={handleSubmit((data) =>{
         setBankDetails(data)
         preFilled ? 
@@ -36,12 +39,12 @@ const bankData = preFilled?.additionalDetails?.bankDetails
         : dispatch(editEmployeeAdditionalDetails(userId,null,null,null,null,null,null,null,null,data.bankName,data.accountNumber,data.ifscCode,data.bankBranch))
         
       } )}
-      className='flex flex-col gap-12 w-3/4 border  mx-auto '>
-      <div className='flex flex-wrap gap-12'>
-    
-       <label className='flex flex-col'>
-        Bank Name
+      className='flex flex-col gap-12    mx-auto '>
+        <div>
+     
        <select
+                 className={`appearance-none w-full min-w-72 max-w-96 p-2 drop-shadow-lg border-2 rounded mb-3 mx-auto ${Theme=="Dark" ? "bg-slate-800 text-white" : "bg-slate-100"}`}
+                 
        {...register("bankName", { required: true })}
        >
             <option>Select Bank</option>
@@ -51,20 +54,27 @@ const bankData = preFilled?.additionalDetails?.bankDetails
             <option value={"Axis Bank"}>Axis Bank</option>
             <option value={"HDFC Bank"}>HDFC Bank</option>
         </select>
-       </label>
+   
+        </div>
+      <div className='flex flex-wrap gap-12'>
+    
+      
       <InputField
         label={`Account Number`}
+        placeholder={`Account Number`}
         defaultValue = {bankData?.accountNumber}
         {...register('accountNumber', { required: true })}
         />
         <InputField
         label={`IFSC Code`}
+        placeholder={`IFSC Code`}
         defaultValue = {bankData?.ifscCode}
         {...register('ifscCode', { required: true })}
         />
     
     <InputField
         label={`Bank Branch`}
+        placeholder={`Bank Branch`}
         defaultValue = {bankData?.bankBranch}
         {...register('bankBranch', { required: true })}
         />

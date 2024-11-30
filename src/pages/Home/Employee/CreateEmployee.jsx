@@ -11,6 +11,7 @@ import { getAllDepartments } from '../../../services/operations/Department'
 import { useLocation } from 'react-router-dom'
 
 const CreateEmployee = () => {
+  const Theme = useSelector((state)=>state.Theme.theme)
   const location = useLocation()
   const preFilled = location.state?.preFilled
   console.log(preFilled)
@@ -33,7 +34,13 @@ const CreateEmployee = () => {
   console.log("UUSSEERR  IIDD",userId)
   return(
     <>
-      <div className='flex flex-col gap-10 items-center justify-center'>
+      <div className={`flex flex-col gap-10 items-center rounded-lg ${Theme=="Dark" ? "bg-slate-800 text-white" : "bg-slate-100"}`}>
+        
+      <div className='flex justify-between font-bold w-full p-5 text-xl'>
+           <p>{location.pathname.split("/").at(-1).replaceAll("-"," ")}</p>
+           <p>Home / <span className='text-yellow-600'>{location.pathname.split("/").at(-1).replaceAll("-"," ")}</span></p>
+           </div>
+
    <FormStatus
    formState={formState}
    />
